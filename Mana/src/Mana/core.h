@@ -3,7 +3,7 @@
 
 
 #ifdef MA_PLATFORM_WINDOWS
-    #ifdef MANA_BUILD_DLL
+    #ifdef MA_BUILD_DLL
         #define MANA_API __declspec(dllexport)
     #else
         #define MANA_API __declspec(dllimport)

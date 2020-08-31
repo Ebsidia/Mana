@@ -1,10 +1,11 @@
 #include "Application.h"
+#include "Log.h"
 
 namespace Mana {
 
     Application::Application()
     {
-
+        
     }
 
     Application::~Application()
@@ -14,6 +15,8 @@ namespace Mana {
 
     void Application::run()
     {
+        MA_CORE_TRACE("In Application::run");
+
         while (true);
     }
 

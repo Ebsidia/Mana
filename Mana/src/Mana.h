@@ -11,6 +11,7 @@
 *******************************************************************************/
 
 #include "Mana/Application.h"
+#include "Mana/Log.h"
 
 //----------------Entry Point--------------
 #include "Mana/EntryPoint.h"

@@ -1,5 +1,14 @@
 #pragma once
 
+/******************************************************************************
+   File: Application.h
+
+   Description:
+       Application class that is intended to be inherited by Mana Applications
+
+
+*******************************************************************************/
+
 #include "core.h"
 
 namespace Mana {
