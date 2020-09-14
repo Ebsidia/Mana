@@ -4,6 +4,9 @@
     <Filter Include="Mana">
       <UniqueIdentifier>{E2F3887C-CE2A-8A0D-7717-7010632D060F}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Mana\Events">
+      <UniqueIdentifier>{862D2DEE-F2E2-A5E3-7BD7-9FBAE78B9CE7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Mana.h" />
@@ -12,6 +15,18 @@
     </ClInclude>
     <ClInclude Include="src\Mana\EntryPoint.h">
       <Filter>Mana</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Mana\Events\ApplicationEvent.h">
+      <Filter>Mana\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Mana\Events\Event.h">
+      <Filter>Mana\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Mana\Events\KeyEvent.h">
+      <Filter>Mana\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Mana\Events\MouseEvent.h">
+      <Filter>Mana\Events</Filter>
     </ClInclude>
     <ClInclude Include="src\Mana\Log.h">
       <Filter>Mana</Filter>

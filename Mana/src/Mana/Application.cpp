@@ -1,5 +1,8 @@
 #include "Application.h"
+
+#include "Mana/Events/ApplicationEvent.h"
 #include "Log.h"
+
 
 namespace Mana {
 
@@ -15,7 +18,8 @@ namespace Mana {
 
     void Application::run()
     {
-        MA_CORE_TRACE("In Application::run");
+        WindowResizeEvent e(1280, 720);
+        MA_CORE_TRACE(e);
 
         while (true);
     }
