@@ -12,6 +12,8 @@
 #include "core.h"
 #include "Events/Event.h"
 
+#include "Window.h"
+
 namespace Mana {
 
     class MANA_API Application
@@ -22,7 +24,8 @@ namespace Mana {
 
         void run();
     private:
-
+        std::unique_ptr<Window> m_window;
+        bool m_running = true;
     };
 
     //To be defined in Client Application

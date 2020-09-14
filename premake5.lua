@@ -11,6 +11,12 @@ workspace "Mana"
 
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
+-- Include Directories relative to root folder
+IncludeDir = {}
+IncludeDir["GLFW"] = "Mana/vendor/GLFW/include"
+
+include "Mana/vendor/GLFW" -- includes the premake5.lua file from "Mana/vendor/GLFW"
+
 project "Mana"
     location "Mana"
     kind "SharedLib" --dynamic library
@@ -18,6 +24,9 @@ project "Mana"
 
     targetdir("bin/" .. outputdir .. "/%{prj.name}")
     objdir("bin-int/" .. outputdir .. "/%{prj.name}")
+
+    pchheader "mapch.h"
+    pchsource "Mana/src/mapch.cpp"
 
     files
     {
@@ -30,6 +39,13 @@ project "Mana"
     {
         "%{prj.name}/src",
         "%{prj.name}/vendor/spdlog/include",
+        "%{IncludeDir.GLFW}"
+    }
+
+    links
+    {
+        "GLFW",
+        "opengl32.lib"
     }
 
     filter "system:windows"

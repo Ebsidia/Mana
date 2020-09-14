@@ -2,8 +2,6 @@
 
 #include "Event.h"
 
-#include <sstream>
-
 namespace Mana
 {
     class MANA_API WindowResizeEvent : public Event

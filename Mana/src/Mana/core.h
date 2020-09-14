@@ -10,4 +10,12 @@
     #error Mana only supports Windows!
 #endif
 
+#ifdef MA_ENABLE_ASSERTS
+    #define MA_ASSERT(x, ...) {if(!(x)) {MA_ERROR("Assertion Failed: {0}", __VA_ARGS__); __debugbreak();} }
+    #define MA_CORE_ASSERT(x, ...) {if(!(x)) {MA_CORE_ERROR("Assertion Failed: {0}", __VA_ARGS__); __debugbreak();} }
+#else
+    #define MA_ASSERT(x, ...)
+    #define MA_CORE_ASSERT(x, ...)
+#endif
+
 #define BIT(x) (1 << x)

@@ -34,6 +34,9 @@
     <ClInclude Include="src\Mana\core.h">
       <Filter>Mana</Filter>
     </ClInclude>
+    <ClInclude Include="src\mapch.h" />
+    <ClInclude Include="src\Mana\Window.h" />
+    <ClInclude Include="src\Platform\Windows\WindowsWindow.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Mana\Application.cpp">
@@ -42,5 +45,7 @@
     <ClCompile Include="src\Mana\Log.cpp">
       <Filter>Mana</Filter>
     </ClCompile>
+    <ClCompile Include="src\mapch.cpp" />
+    <ClCompile Include="src\Platform\Windows\WindowsWindow.cpp" />
   </ItemGroup>
 </Project>

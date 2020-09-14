@@ -2,8 +2,6 @@
 
 #include "Event.h"
 
-#include <sstream>
-
 namespace Mana
 {
     class MANA_API MouseMovedEvent : public Event 

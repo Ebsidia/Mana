@@ -1,3 +1,6 @@
 [submodule "Mana/vendor/spdlog"]
 	path = Mana/vendor/spdlog
 	url = https://github.com/gabime/spdlog
+[submodule "Mana/vendor/GLFW"]
+	path = Mana/vendor/GLFW
+	url = https://github.com/Ebsidia/glfw

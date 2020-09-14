@@ -1,9 +1,6 @@
 #pragma once
-
+#include "mapch.h"
 #include "Mana/core.h"
-
-#include <string>
-#include <functional>
 
 namespace Mana
 {

@@ -2,8 +2,6 @@
 
 #include "Event.h"
 
-#include <sstream>
-
 namespace Mana
 {
     class MANA_API KeyEvent : public Event 
