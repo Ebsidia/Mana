@@ -10,9 +10,13 @@
 *******************************************************************************/
 
 #include "core.h"
-#include "Events/Event.h"
 
 #include "Window.h"
+#include "Mana/LayerStack.h"
+#include "Events/Event.h"
+#include "Events/ApplicationEvent.h"
+
+
 
 namespace Mana {
 
@@ -23,9 +27,19 @@ namespace Mana {
         virtual ~Application();
 
         void run();
+
+        void onEvent(Event& event);
+
+        void pushLayer(Layer* layer);
+        void pushOverlay(Layer* overlay);
+    private:
+        bool onWindowClosed(WindowClosedEvent& event);
+
     private:
         std::unique_ptr<Window> m_window;
         bool m_running = true;
+
+        LayerStack m_layerStack;
     };
 
     //To be defined in Client Application

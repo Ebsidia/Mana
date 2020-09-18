@@ -7,6 +7,12 @@
     <Filter Include="Mana\Events">
       <UniqueIdentifier>{862D2DEE-F2E2-A5E3-7BD7-9FBAE78B9CE7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Platform">
+      <UniqueIdentifier>{2AC788B4-1694-E3BF-3FAD-D1672BD9184E}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Platform\Windows">
+      <UniqueIdentifier>{64FBD71A-50F4-F66C-7926-DCF1657ED678}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Mana.h" />
@@ -28,24 +34,42 @@
     <ClInclude Include="src\Mana\Events\MouseEvent.h">
       <Filter>Mana\Events</Filter>
     </ClInclude>
+    <ClInclude Include="src\Mana\Layer.h">
+      <Filter>Mana</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Mana\LayerStack.h">
+      <Filter>Mana</Filter>
+    </ClInclude>
     <ClInclude Include="src\Mana\Log.h">
+      <Filter>Mana</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Mana\Window.h">
       <Filter>Mana</Filter>
     </ClInclude>
     <ClInclude Include="src\Mana\core.h">
       <Filter>Mana</Filter>
     </ClInclude>
+    <ClInclude Include="src\Platform\Windows\WindowsWindow.h">
+      <Filter>Platform\Windows</Filter>
+    </ClInclude>
     <ClInclude Include="src\mapch.h" />
-    <ClInclude Include="src\Mana\Window.h" />
-    <ClInclude Include="src\Platform\Windows\WindowsWindow.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Mana\Application.cpp">
       <Filter>Mana</Filter>
     </ClCompile>
+    <ClCompile Include="src\Mana\Layer.cpp">
+      <Filter>Mana</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Mana\LayerStack.cpp">
+      <Filter>Mana</Filter>
+    </ClCompile>
     <ClCompile Include="src\Mana\Log.cpp">
       <Filter>Mana</Filter>
     </ClCompile>
+    <ClCompile Include="src\Platform\Windows\WindowsWindow.cpp">
+      <Filter>Platform\Windows</Filter>
+    </ClCompile>
     <ClCompile Include="src\mapch.cpp" />
-    <ClCompile Include="src\Platform\Windows\WindowsWindow.cpp" />
   </ItemGroup>
 </Project>

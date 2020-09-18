@@ -6,6 +6,7 @@ namespace Mana
 {
     class MANA_API MouseMovedEvent : public Event 
     {
+    public:
         MouseMovedEvent(float x, float y)
             : m_mouseX(x), m_mouseY(y) {}
 
@@ -53,7 +54,7 @@ namespace Mana
     public:
         inline int getMouseButton() const { return m_button; }
 
-        EVENT_CLASS_CATEGORY(EventCategoryMouse | EventGategoryInput)
+        EVENT_CLASS_CATEGORY(EventCategoryMouse | EventCategoryInput)
 
     protected:
         MouseButtonEvent(int button)
@@ -64,6 +65,7 @@ namespace Mana
 
     class MANA_API MouseButtonPressedEvent : public MouseButtonEvent
     {
+    public:
         MouseButtonPressedEvent(int button)
             :MouseButtonEvent(button){}
 
@@ -79,6 +81,7 @@ namespace Mana
 
     class MANA_API MouseButtonReleasedEvent : public MouseButtonEvent
     {
+    public:
         MouseButtonReleasedEvent(int button)
             : MouseButtonEvent(button) {}
 

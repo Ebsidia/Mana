@@ -84,6 +84,7 @@
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <AdditionalOptions>/MDd %(AdditionalOptions)</AdditionalOptions>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -109,6 +110,7 @@
       <MinimalRebuild>false</MinimalRebuild>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <AdditionalOptions>/MD %(AdditionalOptions)</AdditionalOptions>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -135,6 +137,7 @@
       <MinimalRebuild>false</MinimalRebuild>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <AdditionalOptions>/MD %(AdditionalOptions)</AdditionalOptions>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -156,19 +159,23 @@
     <ClInclude Include="src\Mana\Events\Event.h" />
     <ClInclude Include="src\Mana\Events\KeyEvent.h" />
     <ClInclude Include="src\Mana\Events\MouseEvent.h" />
+    <ClInclude Include="src\Mana\Layer.h" />
+    <ClInclude Include="src\Mana\LayerStack.h" />
     <ClInclude Include="src\Mana\Log.h" />
-    <ClInclude Include="src\Mana\core.h" />
     <ClInclude Include="src\Mana\Window.h" />
-    <ClInclude Include="src\mapch.h" />
+    <ClInclude Include="src\Mana\core.h" />
     <ClInclude Include="src\Platform\Windows\WindowsWindow.h" />
+    <ClInclude Include="src\mapch.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Mana\Application.cpp" />
+    <ClCompile Include="src\Mana\Layer.cpp" />
+    <ClCompile Include="src\Mana\LayerStack.cpp" />
     <ClCompile Include="src\Mana\Log.cpp" />
+    <ClCompile Include="src\Platform\Windows\WindowsWindow.cpp" />
     <ClCompile Include="src\mapch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="src\Platform\Windows\WindowsWindow.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="vendor\GLFW\GLFW.vcxproj">
