@@ -6,6 +6,9 @@
 #include "Mana/Events/KeyEvent.h"
 #include "Mana/Events/MouseEvent.h"
 
+#include "glad/glad.h"
+
+
 namespace Mana
 {
     static bool s_GLFWInitialized = false;
@@ -69,6 +72,10 @@ namespace Mana
 
         m_window = glfwCreateWindow((int)props.Width, (int)props.Height, m_data.Title.c_str(), nullptr, nullptr);
         glfwMakeContextCurrent(m_window);
+
+        int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
+        MA_CORE_ASSERT(status, "Failed to initialize GLAD");
+
         glfwSetWindowUserPointer(m_window, &m_data);
         setVSync(true);
 

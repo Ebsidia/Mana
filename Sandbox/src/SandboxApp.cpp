@@ -11,7 +11,7 @@ public:
 
     void onUpdate() override
     {
-        MA_INFO("ExampleLayer::Update");
+        //MA_INFO("ExampleLayer::Update");
     }
 
     void onEvent(Mana::Event& event) override
@@ -26,6 +26,7 @@ public:
     Sandbox()
     {
         pushLayer(new ExampleLayer());
+        pushOverlay(new Mana::ImGuiLayer());
     }
 
     ~Sandbox()

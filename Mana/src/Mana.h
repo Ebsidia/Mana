@@ -13,6 +13,7 @@
 #include "Mana/Application.h"
 #include "Mana/Layer.h"
 #include "Mana/Log.h"
+#include "Mana/ImGui/ImGuiLayer.h"
 
 //----------------Entry Point--------------
 #include "Mana/EntryPoint.h"

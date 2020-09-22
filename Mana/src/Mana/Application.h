@@ -32,14 +32,19 @@ namespace Mana {
 
         void pushLayer(Layer* layer);
         void pushOverlay(Layer* overlay);
+
+        inline Window& getWindow() { return *m_window; }
+        inline static Application& get() { return *s_instance; }
+
     private:
         bool onWindowClosed(WindowClosedEvent& event);
 
-    private:
         std::unique_ptr<Window> m_window;
         bool m_running = true;
 
         LayerStack m_layerStack;
+    private:
+        static Application* s_instance;
     };
 
     //To be defined in Client Application

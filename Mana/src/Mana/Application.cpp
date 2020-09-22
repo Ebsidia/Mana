@@ -9,8 +9,13 @@ namespace Mana {
 
 #define  BIND_EVENT_FN(x) std::bind(&Application::x, this, std::placeholders::_1)
 
+    Application* Application::s_instance = nullptr;
+
     Application::Application()
     {
+        MA_CORE_ASSERT(!s_instance, "Appication already exists!");
+        s_instance = this;
+
         m_window = std::unique_ptr<Window>(Window::Create());
         m_window->setEventCallback(BIND_EVENT_FN(onEvent));
     }
@@ -54,11 +59,13 @@ namespace Mana {
     void Application::pushLayer(Layer* layer)
     {
         m_layerStack.pushLayer(layer);
+        layer->onAttach();
     }
 
     void Application::pushOverlay(Layer* overlay)
     {
         m_layerStack.pushOverlay(overlay);
+        overlay->onAttach();
     }
 
     bool Application::onWindowClosed(WindowClosedEvent& event)

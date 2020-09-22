@@ -14,8 +14,12 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 -- Include Directories relative to root folder
 IncludeDir = {}
 IncludeDir["GLFW"] = "Mana/vendor/GLFW/include"
+IncludeDir["GLAD"] = "Mana/vendor/GLAD/include"
+IncludeDir["ImGui"] = "Mana/vendor/ImGui"
 
 include "Mana/vendor/GLFW" -- includes the premake5.lua file from "Mana/vendor/GLFW"
+include "Mana/vendor/GLAD"
+include "Mana/vendor/ImGui"
 
 project "Mana"
     location "Mana"
@@ -39,13 +43,18 @@ project "Mana"
     {
         "%{prj.name}/src",
         "%{prj.name}/vendor/spdlog/include",
-        "%{IncludeDir.GLFW}"
+        "%{IncludeDir.GLFW}",
+        "%{IncludeDir.GLAD}",
+        "%{IncludeDir.ImGui}"
     }
 
     links
     {
         "GLFW",
+        "GLAD",
+        "ImGui",
         "opengl32.lib"
+        
     }
 
     filter "system:windows"
@@ -56,7 +65,8 @@ project "Mana"
         defines
         {
             "MA_PLATFORM_WINDOWS",
-            "MA_BUILD_DLL"
+            "MA_BUILD_DLL",
+            "GLFW_INCLUDE_NONE"
         }
 
         postbuildcommands
