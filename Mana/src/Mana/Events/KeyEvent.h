@@ -6,6 +6,7 @@ namespace Mana
 {
     class MANA_API KeyEvent : public Event 
     {
+    public:
         inline int getKeyCode() const { return m_keyCode; }
 
         EVENT_CLASS_CATEGORY(EventCategoryKeyboard | EventCategoryInput)
@@ -51,5 +52,21 @@ namespace Mana
 
         EVENT_CLASS_TYPE(KeyReleased)
 
+    };
+
+    class MANA_API KeyTypedEvent : public KeyEvent
+    {
+    public:
+        KeyTypedEvent(int keyCode)
+            : KeyEvent(keyCode) {}
+
+        std::string toString() const override
+        {
+            std::stringstream ss;
+            ss << "KeyPTypedEvent: " << m_keyCode;
+            return ss.str();
+        }
+
+        EVENT_CLASS_TYPE(KeyTyped)
     };
 }

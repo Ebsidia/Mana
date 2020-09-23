@@ -4,6 +4,8 @@
 #include "Mana/Events/ApplicationEvent.h"
 #include "Log.h"
 
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
 
 namespace Mana {
 
@@ -30,11 +32,15 @@ namespace Mana {
        
         while (m_running)
         {
+            glClearColor(0.33f, 0.0f, 0.66f, 1);
+            glClear(GL_COLOR_BUFFER_BIT);
+
             for (Layer* layer : m_layerStack)
             {
                 layer->onUpdate();
             }
 
+            
             m_window->onUpdate();
         }
 
