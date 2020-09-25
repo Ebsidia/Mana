@@ -7,6 +7,8 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
+#include "Mana/Input.h"
+
 namespace Mana {
 
 #define  BIND_EVENT_FN(x) std::bind(&Application::x, this, std::placeholders::_1)
@@ -40,6 +42,8 @@ namespace Mana {
                 layer->onUpdate();
             }
 
+            //auto [x, y] = Input::getMousPos();
+            //MA_CORE_TRACE("{0}, {1}", x, y);
             
             m_window->onUpdate();
         }
@@ -52,7 +56,7 @@ namespace Mana {
         EventDispatcher dispatcher(event);
         dispatcher.Dispatch<WindowClosedEvent>(BIND_EVENT_FN(onWindowClosed));
 
-        MA_CORE_TRACE("{0}", event);
+        //MA_CORE_TRACE("{0}", event);
 
         for (auto it = m_layerStack.end(); it != m_layerStack.begin();)
         {
@@ -76,6 +80,7 @@ namespace Mana {
 
     bool Application::onWindowClosed(WindowClosedEvent& event)
     {
+        MA_CORE_TRACE("{0}", event);
         m_running = false;
 
         return true;

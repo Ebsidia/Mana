@@ -12,11 +12,20 @@ public:
     void onUpdate() override
     {
         //MA_INFO("ExampleLayer::Update");
+        if(Mana::Input::isKeyPressed(MA_KEY_TAB))
+        {
+            MA_TRACE("Tab key is pressed");
+        }
     }
 
     void onEvent(Mana::Event& event) override
     {
-        MA_TRACE("{0}", event);
+        //MA_TRACE("{0}", event);
+        if (event.getEventType() == Mana::EventType::KeyPressed)
+        {
+            Mana::KeyPressedEvent& e = (Mana::KeyPressedEvent & )event;
+            MA_TRACE("{0}", (char)e.getKeyCode());
+        }
     }
 };
 
