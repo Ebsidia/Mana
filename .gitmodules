@@ -10,3 +10,6 @@
 [submodule "Mana/vendor/ImGui"]
 	path = Mana/vendor/ImGui
 	url = https://github.com/Ebsidia/imgui
+[submodule "Mana/vendor/glm"]
+	path = Mana/vendor/glm
+	url = https://github.com/g-truc/glm

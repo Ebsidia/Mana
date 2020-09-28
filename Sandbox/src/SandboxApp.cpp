@@ -35,7 +35,6 @@ public:
     Sandbox()
     {
         pushLayer(new ExampleLayer());
-        pushOverlay(new Mana::ImGuiLayer());
     }
 
     ~Sandbox()

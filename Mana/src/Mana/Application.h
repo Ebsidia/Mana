@@ -16,6 +16,8 @@
 #include "Events/Event.h"
 #include "Events/ApplicationEvent.h"
 
+#include "ImGui/ImGuiLayer.h"
+
 
 
 namespace Mana {
@@ -40,6 +42,7 @@ namespace Mana {
         bool onWindowClosed(WindowClosedEvent& event);
 
         std::unique_ptr<Window> m_window;
+        ImGuiLayer* m_imguiLayer;
         bool m_running = true;
 
         LayerStack m_layerStack;

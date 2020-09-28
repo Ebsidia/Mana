@@ -9,6 +9,8 @@
 
 #include "Mana/Input.h"
 
+
+
 namespace Mana {
 
 #define  BIND_EVENT_FN(x) std::bind(&Application::x, this, std::placeholders::_1)
@@ -22,6 +24,9 @@ namespace Mana {
 
         m_window = std::unique_ptr<Window>(Window::Create());
         m_window->setEventCallback(BIND_EVENT_FN(onEvent));
+
+        m_imguiLayer = new ImGuiLayer;
+        pushOverlay(m_imguiLayer);
     }
 
     Application::~Application()
@@ -38,9 +43,15 @@ namespace Mana {
             glClear(GL_COLOR_BUFFER_BIT);
 
             for (Layer* layer : m_layerStack)
-            {
                 layer->onUpdate();
-            }
+            
+
+            m_imguiLayer->begin();
+
+            for (Layer* layer : m_layerStack)
+                layer->onImGuiRender();
+
+            m_imguiLayer->end();
 
             //auto [x, y] = Input::getMousPos();
             //MA_CORE_TRACE("{0}, {1}", x, y);

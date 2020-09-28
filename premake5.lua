@@ -17,6 +17,7 @@ IncludeDir = {}
 IncludeDir["GLFW"] = "Mana/vendor/GLFW/include"
 IncludeDir["GLAD"] = "Mana/vendor/GLAD/include"
 IncludeDir["ImGui"] = "Mana/vendor/ImGui"
+IncludeDir["glm"] = "Mana/vendor/glm"
 
 include "Mana/vendor/GLFW" -- includes the premake5.lua file from "Mana/vendor/GLFW"
 include "Mana/vendor/GLAD"
@@ -38,7 +39,8 @@ project "Mana"
     {
         "%{prj.name}/src/**.h",
         "%{prj.name}/src/**.cpp",
-
+        "%{prj.name}/vendor/glm/glm/**.hpp",
+        "%{prj.name}/vendor/glm/glm/**.inl"
     }
 
     includedirs
@@ -47,7 +49,8 @@ project "Mana"
         "%{prj.name}/vendor/spdlog/include",
         "%{IncludeDir.GLFW}",
         "%{IncludeDir.GLAD}",
-        "%{IncludeDir.ImGui}"
+        "%{IncludeDir.ImGui}",
+        "%{IncludeDir.glm}"
     }
 
     links
@@ -102,14 +105,15 @@ project "Sandbox"
     files
     {
         "%{prj.name}/src/**.h",
-        "%{prj.name}/src/**.cpp",
-
+        "%{prj.name}/src/**.cpp"
     }
 
     includedirs
     {
         "Mana/vendor/spdlog/include",
-        "Mana/src"
+        "Mana/src",
+        "Mana/vendor",
+        "%{IncludeDir.glm}"
     }
 
     links
