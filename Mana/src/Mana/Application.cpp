@@ -9,11 +9,7 @@
 
 #include "Mana/Input.h"
 
-
-
 namespace Mana {
-
-#define  BIND_EVENT_FN(x) std::bind(&Application::x, this, std::placeholders::_1)
 
     Application* Application::s_instance = nullptr;
 
@@ -23,7 +19,7 @@ namespace Mana {
         s_instance = this;
 
         m_window = std::unique_ptr<Window>(Window::Create());
-        m_window->setEventCallback(BIND_EVENT_FN(onEvent));
+        m_window->setEventCallback(MA_BIND_EVENT_FN(Application::onEvent));
 
         m_imguiLayer = new ImGuiLayer;
         pushOverlay(m_imguiLayer);
@@ -58,14 +54,12 @@ namespace Mana {
             
             m_window->onUpdate();
         }
-
-        
     }
-
+    
     void Application::onEvent(Event& event)
     {
         EventDispatcher dispatcher(event);
-        dispatcher.Dispatch<WindowClosedEvent>(BIND_EVENT_FN(onWindowClosed));
+        dispatcher.Dispatch<WindowClosedEvent>(MA_BIND_EVENT_FN(Application::onWindowClosed));
 
         //MA_CORE_TRACE("{0}", event);
 
@@ -96,5 +90,4 @@ namespace Mana {
 
         return true;
     }
-
 }

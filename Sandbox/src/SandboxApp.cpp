@@ -1,5 +1,7 @@
 #include "Mana.h"
 
+#include "imgui/imgui.h"
+
 class ExampleLayer : public Mana::Layer
 {
 public:
@@ -18,7 +20,7 @@ public:
         }
     }
 
-    void onEvent(Mana::Event& event) override
+    virtual void onEvent(Mana::Event& event) override
     {
         //MA_TRACE("{0}", event);
         if (event.getEventType() == Mana::EventType::KeyPressed)
@@ -26,6 +28,13 @@ public:
             Mana::KeyPressedEvent& e = (Mana::KeyPressedEvent & )event;
             MA_TRACE("{0}", (char)e.getKeyCode());
         }
+    }
+
+    void onImGuiRender() override
+    {
+        ImGui::Begin("Test");
+        ImGui::Text("Mana");
+        ImGui::End();
     }
 };
 

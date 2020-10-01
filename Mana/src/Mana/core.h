@@ -1,11 +1,15 @@
 #pragma once
 
 #ifdef MA_PLATFORM_WINDOWS
+#if MA_DYNAMIC_LIB
     #ifdef MA_BUILD_DLL
         #define MANA_API __declspec(dllexport)
     #else
         #define MANA_API __declspec(dllimport)
     #endif
+#else
+    #define MANA_API
+#endif
 #else
     #error Mana only supports Windows!
 #endif

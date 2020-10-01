@@ -25,9 +25,10 @@ include "Mana/vendor/ImGui"
 
 project "Mana"
     location "Mana"
-    kind "SharedLib" --dynamic library
+    kind "StaticLib" --changed mana to use a StaticLib from a SharedLib(dynamic lib)
     language "C++"
-    staticruntime "off"
+    cppdialect "C++17"
+    staticruntime "on"
 
     targetdir("bin/" .. outputdir .. "/%{prj.name}")
     objdir("bin-int/" .. outputdir .. "/%{prj.name}")
@@ -41,6 +42,11 @@ project "Mana"
         "%{prj.name}/src/**.cpp",
         "%{prj.name}/vendor/glm/glm/**.hpp",
         "%{prj.name}/vendor/glm/glm/**.inl"
+    }
+
+    defines
+    {
+        "_CRT_SECURE_NO_WARNINGS"
     }
 
     includedirs
@@ -63,41 +69,36 @@ project "Mana"
     }
 
     filter "system:windows"
-        cppdialect "C++17"
         systemversion "latest"
 
         defines
         {
             "MA_PLATFORM_WINDOWS",
             "MA_BUILD_DLL",
-            "GLFW_INCLUDE_NONE"
-        }
-
-        postbuildcommands
-        {
-            ("{COPY} %{cfg.buildtarget.relpath} \"../bin/" .. outputdir .. "/Sandbox/\"")
+            "GLFW_INCLUDE_NONE",
         }
 
     filter "configurations:Debug"
         defines "MA_DEBUG"
         runtime "Debug"
-        symbols "On"
+        symbols "on"
 
     filter "configurations:Release"
         defines "MA_RELEASE"
         runtime "Release"
-        optimize "On"
+        optimize "on"
 
     filter "configurations:Dist"
         defines "MA_DIST"
         runtime "Release"
-        optimize "On"
+        optimize "on"
 
 project "Sandbox"
         location "Sandbox"
         kind "ConsoleApp"
         language "C++"
-        staticruntime "off"
+        cppdialect "C++17"
+        staticruntime "on"
 
     targetdir("bin/" .. outputdir .. "/%{prj.name}")
     objdir("bin-int/" .. outputdir .. "/%{prj.name}")
@@ -122,7 +123,6 @@ project "Sandbox"
     }
 
     filter "system:windows"
-        cppdialect "C++17"
         systemversion "latest"
 
         defines
@@ -133,14 +133,14 @@ project "Sandbox"
     filter "configurations:Debug"
         defines "MA_DEBUG"
         runtime "Debug"
-        symbols "On"
+        symbols "on"
 
     filter "configurations:Release"
         defines "MA_RELEASE"
         runtime "Release"
-        optimize "On"
+        optimize "on"
 
     filter "configurations:Dist"
         defines "MA_DIST"
         runtime "Release"
-        optimize "On"
+        optimize "on"

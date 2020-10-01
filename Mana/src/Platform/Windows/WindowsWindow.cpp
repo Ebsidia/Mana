@@ -6,8 +6,7 @@
 #include "Mana/Events/KeyEvent.h"
 #include "Mana/Events/MouseEvent.h"
 
-#include "glad/glad.h"
-
+#include "Platform/OpenGL/OpenGLContext.h"
 
 namespace Mana
 {
@@ -36,7 +35,7 @@ namespace Mana
     void WindowsWindow::onUpdate()
     {
         glfwPollEvents();
-        glfwSwapBuffers(m_window);
+        m_context->swapBuffers();
     }
 
     void WindowsWindow::setVSync(bool enabled)
@@ -60,6 +59,8 @@ namespace Mana
         m_data.Width = props.Width;
         m_data.Height = props.Height;
 
+        
+
         MA_CORE_INFO("Creating Window {0} ({1}, {2})", props.Title, props.Width, props.Height);
 
         if (!s_GLFWInitialized)
@@ -71,11 +72,11 @@ namespace Mana
         }
 
         m_window = glfwCreateWindow((int)props.Width, (int)props.Height, m_data.Title.c_str(), nullptr, nullptr);
-        glfwMakeContextCurrent(m_window);
 
-        int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
-        MA_CORE_ASSERT(status, "Failed to initialize GLAD");
+        m_context = new OpenGLContext(m_window);
+        m_context->init();
 
+   
         glfwSetWindowUserPointer(m_window, &m_data);
         setVSync(true);
 

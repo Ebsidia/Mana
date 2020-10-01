@@ -1,8 +1,10 @@
 #pragma once
 
 #include "Mana/Window.h"
+#include "Mana/Render/GraphicsContext.h"
 
 #include "GLFW/glfw3.h"
+
 
 namespace Mana
 {
@@ -28,6 +30,7 @@ namespace Mana
 
     private:
         GLFWwindow* m_window;
+        GraphicsContext* m_context;
 
         //Struct of window data for passing to GLFW for event purposes
         struct WindowData
