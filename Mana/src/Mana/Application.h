@@ -21,6 +21,7 @@
 //temporary
 #include "Mana/Render/Shader.h"
 #include "Mana/Render/Buffer.h"
+#include "Mana/Render/VertexArray.h"
 
 namespace Mana {
 
@@ -49,10 +50,12 @@ namespace Mana {
 
         LayerStack m_layerStack;
 
-        unsigned int m_vertexArray;
-        std::unique_ptr<Shader> m_shader;
-        std::unique_ptr<VertexBuffer> m_vertexBuffer;
-        std::unique_ptr<IndexBuffer> m_indexBuffer;
+        std::shared_ptr<Shader> m_shader;
+        std::shared_ptr<VertexArray> m_vertexArray;
+
+        //test
+        std::shared_ptr<Shader> m_squareShader;
+        std::shared_ptr<VertexArray> m_squareVA;
     private:
         static Application* s_instance;
     };

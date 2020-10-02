@@ -1,38 +1,18 @@
 #include "mapch.h"
 #include "Application.h"
 
-#include "Mana/Events/ApplicationEvent.h"
 #include "Log.h"
 
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
+#include "Mana/Render/Renderer.h"
 
 #include "Mana/Input.h"
+
+#include "Mana/KeyCodes.h"
+#include "mana/MouseButtonCodes.h"
 
 namespace Mana {
 
     Application* Application::s_instance = nullptr;
-
-    static GLenum ShaderDataTypeToOpenGLBaseType(ShaderDataType type)
-    {
-        switch (type)
-        {
-            case Mana::ShaderDataType::Float:   return GL_FLOAT;
-            case Mana::ShaderDataType::Float2:  return GL_FLOAT;
-            case Mana::ShaderDataType::Float3:  return GL_FLOAT;
-            case Mana::ShaderDataType::Float4:  return GL_FLOAT;
-            case Mana::ShaderDataType::Mat3:    return GL_FLOAT;
-            case Mana::ShaderDataType::Mat4:    return GL_FLOAT;
-            case Mana::ShaderDataType::Int:     return GL_INT;
-            case Mana::ShaderDataType::Int2:    return GL_INT;
-            case Mana::ShaderDataType::Int3:    return GL_INT;
-            case Mana::ShaderDataType::Int4:    return GL_INT;
-            case Mana::ShaderDataType::Bool:    return GL_BOOL;
-        }
-
-        MA_CORE_ASSERT(false, "Unknow ShaderDataType!");
-        return 0;
-    }
 
     Application::Application()
     {
@@ -45,8 +25,7 @@ namespace Mana {
         m_imguiLayer = new ImGuiLayer;
         pushOverlay(m_imguiLayer);
 
-        glGenVertexArrays(1, &m_vertexArray);
-        glBindVertexArray(m_vertexArray);
+        m_vertexArray.reset(VertexArray::Create());
 
         float vertices[3 * 7] = {
             -0.5f, -0.5f, 0.0f, 0.33f, 0.0f, 0.66f, 1.0f,
@@ -54,33 +33,56 @@ namespace Mana {
              0.0f,  0.5f, 0.0f, 0.0f, 0.66f, 0.33f, 1.0f
         };
 
-        m_vertexBuffer.reset(VertexBuffer::Create(vertices, sizeof(vertices)));
+        std::shared_ptr<VertexBuffer> vertexBuffer;
+        vertexBuffer.reset(VertexBuffer::Create(vertices, sizeof(vertices)));
 
-        {
-            BufferLayout layout = {
-                {ShaderDataType::Float3, "a_position"},
-                {ShaderDataType::Float4, "a_color"}
-            };
+        BufferLayout layout = {
+            {ShaderDataType::Float3, "a_position"},
+            {ShaderDataType::Float4, "a_color"}
+        };
 
-            m_vertexBuffer->setLayout(layout);
+        vertexBuffer->setLayout(layout);
 
-        }
-
-        uint32_t index = 0;
-        const auto& layout = m_vertexBuffer->getLayout();
-        for (const auto& element : layout)
-        {
-            glEnableVertexAttribArray(index);
-            glVertexAttribPointer(index, element.getComponentCount(), ShaderDataTypeToOpenGLBaseType(element.Type), 
-                element.Normalized ? GL_TRUE : GL_FALSE, layout.getStride(), (const void*)element.Offset);
-            index++;
-        }
+        m_vertexArray->addVertexBuffer(vertexBuffer);
 
         uint32_t indices[3] = {
             0, 1, 2
         };
 
-        m_indexBuffer.reset(IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t)));
+        std::shared_ptr<IndexBuffer> indexBuffer;
+        indexBuffer.reset(IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t)));
+        m_vertexArray->setIndexBuffer(indexBuffer);
+
+        m_squareVA.reset(VertexArray::Create());
+
+        float square[3 * 4] = {
+            -0.75f, -0.75f, 0.0f,
+             0.75f, -0.75f, 0.0f,
+             0.75f,  0.75f, 0.0f,
+            -0.75f,  0.75f, 0.0f,
+        };
+
+        std::shared_ptr<VertexBuffer> squareVB;
+        squareVB.reset(VertexBuffer::Create(square, sizeof(square)));
+
+        BufferLayout squarelayout = {
+            {ShaderDataType::Float3, "a_position"},
+        };
+
+        squareVB->setLayout({
+            {ShaderDataType::Float3, "a_position"}
+            });
+
+        m_squareVA->addVertexBuffer(squareVB);
+
+        uint32_t squareIndices[6] = {
+            0, 1, 2,
+            2, 3, 0
+        };
+
+        std::shared_ptr<IndexBuffer> squareIB;
+        squareIB.reset(IndexBuffer::Create(squareIndices, sizeof(square) / sizeof(uint32_t)));
+        m_squareVA->setIndexBuffer(squareIB);
 
         std::string vertexSource = R"(
             #version 330 core
@@ -116,6 +118,36 @@ namespace Mana {
         )";
 
         m_shader.reset(new Shader(vertexSource, fragmentSource));
+
+        std::string squareVertSource = R"(
+            #version 330 core
+            
+            layout(location = 0) in vec3 a_position;
+
+            out vec3 v_position;
+
+            void main()
+            {
+                v_position = a_position;
+                gl_Position = vec4(a_position, 1.0f);
+                
+            }
+        )";
+
+        std::string squareFragSource = R"(
+            #version 330 core
+            
+            layout(location = 0) out vec4 color;
+
+            in vec3 v_position;
+
+            void main()
+            {
+                color = vec4(0.33f, 0.0f, 0.66f, 1.0f);
+            }
+        )";
+
+        m_squareShader.reset(new Shader(squareVertSource, squareFragSource));
     }
 
     Application::~Application()
@@ -128,12 +160,30 @@ namespace Mana {
        
         while (m_running)
         {
-            glClearColor(0.15f, 0.15f, 0.15f, 1);
-            glClear(GL_COLOR_BUFFER_BIT);
+           
+            RenderCommand::setClearColor({ 0.15f, 0.15f, 0.15f, 1 });
+            RenderCommand::clear();
+
+            if (Mana::Input::isKeyPressed(MA_KEY_1))
+            {
+                //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+                MA_CORE_INFO("Polygon Mode: GL_LINE");
+            }
+            else if (Mana::Input::isKeyPressed(MA_KEY_2))
+            {
+                //glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+                MA_CORE_INFO("Polygon Mode: GL_FILL");
+            }
+
+            Renderer::beginScene();
+
+            m_squareShader->bind();
+            Renderer::submit(m_squareVA);
 
             m_shader->bind();
-            glBindVertexArray(m_vertexArray);
-            glDrawElements(GL_TRIANGLES, m_indexBuffer->getCount(), GL_UNSIGNED_INT, nullptr);
+            Renderer::submit(m_vertexArray);
+
+            Renderer::endScene();
 
             for (Layer* layer : m_layerStack)
                 layer->onUpdate();

@@ -18,6 +18,7 @@ public:
         {
             MA_TRACE("Tab key is pressed");
         }
+
     }
 
     virtual void onEvent(Mana::Event& event) override

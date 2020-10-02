@@ -10,8 +10,8 @@ namespace Mana {
     {
         switch (Renderer::getAPI())
         {
-            case RendererAPI::None:     MA_CORE_ASSERT(false, "RendererAPI::None is currently not support"); return nullptr;
-            case RendererAPI::OpenGL:   return new OpenGLVertexBuffer(vertices, size);
+        case RendererAPI::API::None:     MA_CORE_ASSERT(false, "RendererAPI::None is currently not support"); return nullptr;
+        case RendererAPI::API::OpenGL:   return new OpenGLVertexBuffer(vertices, size);
         }
 
         MA_CORE_ASSERT(false, "Unknown Renderer API");
@@ -22,8 +22,8 @@ namespace Mana {
     {
         switch (Renderer::getAPI())
         {
-        case RendererAPI::None:     MA_CORE_ASSERT(false, "RendererAPI::None is currently not support"); return nullptr;
-        case RendererAPI::OpenGL:   return new OpenGLIndexBuffer(indices, count);
+        case RendererAPI::API::None:     MA_CORE_ASSERT(false, "RendererAPI::None is currently not support"); return nullptr;
+        case RendererAPI::API::OpenGL:   return new OpenGLIndexBuffer(indices, count);
         }
 
         MA_CORE_ASSERT(false, "Unknown Renderer API");
