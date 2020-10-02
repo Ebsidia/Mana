@@ -18,6 +18,12 @@ namespace Mana {
         glfwMakeContextCurrent(m_windowHandle);
         int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
         MA_CORE_ASSERT(status, "Failed to initialize GLAD");
+
+        MA_CORE_INFO("OpenGL Info:");
+        MA_CORE_INFO("  Vendor: {0}", glGetString(GL_VENDOR));
+        MA_CORE_INFO("  Renderer: {0}", glGetString(GL_RENDERER));
+        MA_CORE_INFO("  Version: {0}", glGetString(GL_VERSION));
+
     }
 
     void OpenGLContext::swapBuffers()

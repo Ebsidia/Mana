@@ -59,9 +59,7 @@ namespace Mana
         m_data.Width = props.Width;
         m_data.Height = props.Height;
 
-        
-
-        MA_CORE_INFO("Creating Window {0} ({1}, {2})", props.Title, props.Width, props.Height);
+        //MA_CORE_INFO("Creating Window {0} ({1}, {2})", props.Title, props.Width, props.Height);
 
         if (!s_GLFWInitialized)
         {
