@@ -4,9 +4,6 @@
 [submodule "Mana/vendor/GLFW"]
 	path = Mana/vendor/GLFW
 	url = https://github.com/Ebsidia/glfw
-[submodule "Mana/vendor/imgui"]
-	path = Mana/vendor/imgui
-	url = https://github.com/Ebsidia/imgui
 [submodule "Mana/vendor/ImGui"]
 	path = Mana/vendor/ImGui
 	url = https://github.com/Ebsidia/imgui
