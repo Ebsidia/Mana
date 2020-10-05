@@ -51,15 +51,6 @@ namespace Mana {
         bool m_running = true;
 
         LayerStack m_layerStack;
-
-        std::shared_ptr<Shader> m_shader;
-        std::shared_ptr<VertexArray> m_vertexArray;
-
-        //test
-        std::shared_ptr<Shader> m_squareShader;
-        std::shared_ptr<VertexArray> m_squareVA;
-
-        OrthographicCamera m_camera;
     private:
         static Application* s_instance;
     };
