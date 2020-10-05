@@ -163,15 +163,43 @@ namespace Mana {
 
     void Application::run()
     {
-       
+        //m_camera.setPosition({ 0.5f, 0.5f, 0.0f });
+        //m_camera.setRotaion(270.0f);
+
+        float x = 0.0f;
+        float y = 0.0f;
+
         while (m_running)
         {
            
             RenderCommand::setClearColor({ 0.15f, 0.15f, 0.15f, 1 });
             RenderCommand::clear();
 
-            m_camera.setPosition({ 0.5f, 0.5f, 0.0f });
-            m_camera.setRotaion(270.0f);
+            
+
+            if (Mana::Input::isKeyPressed(MA_KEY_A))
+            {
+                x += 0.01f;
+                m_camera.setPosition({ x, y, 0.0f });
+            }
+
+            if (Mana::Input::isKeyPressed(MA_KEY_D))
+            {
+                x -= 0.01f;
+                m_camera.setPosition({ x, y, 0.0f });
+            }
+
+            if (Mana::Input::isKeyPressed(MA_KEY_W))
+            {
+                y -= 0.01f;
+                m_camera.setPosition({ x, y, 0.0f });
+            }
+
+            if (Mana::Input::isKeyPressed(MA_KEY_S))
+            {
+                y += 0.01f;
+                m_camera.setPosition({ x, y, 0.0f });
+            }
 
             Renderer::beginScene(m_camera);
 

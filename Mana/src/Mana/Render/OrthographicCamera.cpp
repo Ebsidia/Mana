@@ -18,6 +18,7 @@ namespace Mana {
 
         //OpenGL is column major ordering
         m_viewMatrix = glm::inverse(transform);
+        //m_viewMatrix = transform;
         m_viewProjectionMatrix = m_projectionMatrix * m_viewMatrix;
     }
 
