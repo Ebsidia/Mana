@@ -23,6 +23,8 @@
 #include "Mana/Render/Buffer.h"
 #include "Mana/Render/VertexArray.h"
 
+#include "Mana/Render/OrthographicCamera.h"
+
 namespace Mana {
 
     class MANA_API Application
@@ -56,6 +58,8 @@ namespace Mana {
         //test
         std::shared_ptr<Shader> m_squareShader;
         std::shared_ptr<VertexArray> m_squareVA;
+
+        OrthographicCamera m_camera;
     private:
         static Application* s_instance;
     };

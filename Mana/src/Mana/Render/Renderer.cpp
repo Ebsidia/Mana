@@ -3,11 +3,11 @@
 
 namespace Mana {
 
-    
+    Renderer::SceneData* Renderer::m_sceneData = new Renderer::SceneData;
 
-    void Renderer::beginScene()
+    void Renderer::beginScene(OrthographicCamera& camera)
     {
-
+        m_sceneData->viewProjectionMatrix = camera.getViewProjectionMatrix();
     }
 
     void Renderer::endScene()
@@ -15,8 +15,11 @@ namespace Mana {
 
     }
 
-    void Renderer::submit(const std::shared_ptr<VertexArray>& vertexArray)
+    void Renderer::submit(const std::shared_ptr<Shader>& shader, const std::shared_ptr<VertexArray>& vertexArray)
     {
+        shader->bind();
+        shader->uploadUniformMat4("u_viewProjection", m_sceneData->viewProjectionMatrix);
+
         vertexArray->bind();
         RenderCommand::drawIndexed(vertexArray);
     }

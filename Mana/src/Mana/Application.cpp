@@ -7,6 +7,7 @@
 
 #include "Mana/Input.h"
 
+
 #include "Mana/KeyCodes.h"
 #include "mana/MouseButtonCodes.h"
 
@@ -15,6 +16,7 @@ namespace Mana {
     Application* Application::s_instance = nullptr;
 
     Application::Application()
+        : m_camera(-1.6f, 1.6f, -0.9f, 0.9f)
     {
         MA_CORE_ASSERT(!s_instance, "Appication already exists!");
         s_instance = this;
@@ -90,6 +92,8 @@ namespace Mana {
             layout(location = 0) in vec3 a_position;
             layout(location = 1) in vec4 a_color;
 
+            uniform mat4 u_viewProjection;
+
             out vec3 v_position;
             out vec4 v_color;
 
@@ -97,7 +101,7 @@ namespace Mana {
             {
                 v_position = a_position;
                 v_color = a_color;
-                gl_Position = vec4(a_position, 1.0f);
+                gl_Position = u_viewProjection * vec4(a_position, 1.0f);
                 
             }
         )";
@@ -124,12 +128,14 @@ namespace Mana {
             
             layout(location = 0) in vec3 a_position;
 
+            uniform mat4 u_viewProjection;
+
             out vec3 v_position;
 
             void main()
             {
                 v_position = a_position;
-                gl_Position = vec4(a_position, 1.0f);
+                gl_Position = u_viewProjection * vec4(a_position, 1.0f);
                 
             }
         )";
@@ -164,24 +170,13 @@ namespace Mana {
             RenderCommand::setClearColor({ 0.15f, 0.15f, 0.15f, 1 });
             RenderCommand::clear();
 
-            if (Mana::Input::isKeyPressed(MA_KEY_1))
-            {
-                //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-                MA_CORE_INFO("Polygon Mode: GL_LINE");
-            }
-            else if (Mana::Input::isKeyPressed(MA_KEY_2))
-            {
-                //glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-                MA_CORE_INFO("Polygon Mode: GL_FILL");
-            }
+            m_camera.setPosition({ 0.5f, 0.5f, 0.0f });
+            m_camera.setRotaion(270.0f);
 
-            Renderer::beginScene();
+            Renderer::beginScene(m_camera);
 
-            m_squareShader->bind();
-            Renderer::submit(m_squareVA);
-
-            m_shader->bind();
-            Renderer::submit(m_vertexArray);
+            Renderer::submit(m_squareShader, m_squareVA);
+            Renderer::submit(m_shader, m_vertexArray);
 
             Renderer::endScene();
 

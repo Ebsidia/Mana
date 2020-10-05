@@ -1,6 +1,7 @@
 #pragma once
 
 #include "string"
+#include <glm/glm.hpp>
 
 namespace Mana {
     class Shader
@@ -11,6 +12,8 @@ namespace Mana {
 
         void bind();
         void unbind();
+
+        void uploadUniformMat4(const std::string& name, const glm::mat4& matrix);
     private:
         unsigned int m_rendererID;
     };

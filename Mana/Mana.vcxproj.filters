@@ -1334,6 +1334,7 @@
     <ClInclude Include="src\Mana\Render\RendererAPI.h" />
     <ClInclude Include="src\Mana\Render\RenderCommand.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGLRendererAPI.h" />
+    <ClInclude Include="src\Mana\Render\OrthographicCamera.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Mana\Application.cpp">
@@ -1373,5 +1374,6 @@
     <ClCompile Include="src\Mana\Render\RendererAPI.cpp" />
     <ClCompile Include="src\Mana\Render\RenderCommand.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGLRendererAPI.cpp" />
+    <ClCompile Include="src\Mana\Render\OrthographicCamera.cpp" />
   </ItemGroup>
 </Project>
