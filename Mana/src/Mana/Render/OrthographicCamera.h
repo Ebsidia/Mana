@@ -12,8 +12,8 @@ namespace Mana {
         const glm::vec3& getPosition() const { return m_position; }
         void setPosition(const glm::vec3& position) { m_position = position; recalculateViewMatrix();}
 
-        float getRoation() const { return m_rotation;}
-        void setRotaion(float rotation) { m_rotation = rotation;  recalculateViewMatrix();}
+        float getRotation() const { return m_rotation;}
+        void setRotation(float rotation) { m_rotation = rotation;  recalculateViewMatrix();}
 
         const glm::mat4& getProjectionMatrix() const { return m_projectionMatrix; }
         const glm::mat4& getViewMatrix() const { return m_viewMatrix; }

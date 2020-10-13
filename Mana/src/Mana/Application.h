@@ -16,14 +16,9 @@
 #include "Events/Event.h"
 #include "Events/ApplicationEvent.h"
 
+#include "Mana/Core/TimeStep.h"
+
 #include "ImGui/ImGuiLayer.h"
-
-//temporary
-#include "Mana/Render/Shader.h"
-#include "Mana/Render/Buffer.h"
-#include "Mana/Render/VertexArray.h"
-
-#include "Mana/Render/OrthographicCamera.h"
 
 namespace Mana {
 
@@ -36,6 +31,7 @@ namespace Mana {
         void run();
 
         void onEvent(Event& event);
+        bool onKeyPressed(KeyPressedEvent& event);
 
         void pushLayer(Layer* layer);
         void pushOverlay(Layer* overlay);
@@ -46,11 +42,14 @@ namespace Mana {
     private:
         bool onWindowClosed(WindowClosedEvent& event);
 
+    private:
         std::unique_ptr<Window> m_window;
         ImGuiLayer* m_imguiLayer;
         bool m_running = true;
 
         LayerStack m_layerStack;
+
+        float m_lastFrameTime = 0.0f;
     private:
         static Application* s_instance;
     };

@@ -1,6 +1,12 @@
 #include "Mana.h"
 
+#include "Platform/OpenGL/OpenGLShader.h"
+#include "glm/gtc/type_ptr.hpp"
+
 #include "imgui/imgui.h"
+
+#include <glm/gtc/matrix_transform.hpp>
+
 
 class ExampleLayer : public Mana::Layer
 {
@@ -16,7 +22,7 @@ public:
              0.0f,  0.5f, 0.0f, 0.0f, 0.66f, 0.33f, 1.0f
         };
 
-        std::shared_ptr<Mana::VertexBuffer> vertexBuffer;
+        Mana::Ref<Mana::VertexBuffer> vertexBuffer;
         vertexBuffer.reset(Mana::VertexBuffer::Create(vertices, sizeof(vertices)));
 
         Mana::BufferLayout layout = {
@@ -32,29 +38,26 @@ public:
             0, 1, 2
         };
 
-        std::shared_ptr<Mana::IndexBuffer> indexBuffer;
+        Mana::Ref<Mana::IndexBuffer> indexBuffer;
         indexBuffer.reset(Mana::IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t)));
         m_vertexArray->setIndexBuffer(indexBuffer);
 
         m_squareVA.reset(Mana::VertexArray::Create());
 
-        float square[3 * 4] = {
-            -0.75f, -0.75f, 0.0f,
-             0.75f, -0.75f, 0.0f,
-             0.75f,  0.75f, 0.0f,
-            -0.75f,  0.75f, 0.0f,
+        float square[5 * 4] = {
+            -0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
+             0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
+             0.5f,  0.5f, 0.0f, 1.0f, 1.0f,
+            -0.5f,  0.5f, 0.0f, 0.0f, 1.0f
         };
 
-        std::shared_ptr<Mana::VertexBuffer> squareVB;
+        Mana::Ref<Mana::VertexBuffer> squareVB;
         squareVB.reset(Mana::VertexBuffer::Create(square, sizeof(square)));
 
-        Mana::BufferLayout squarelayout = {
-            {Mana::ShaderDataType::Float3, "a_position"},
-        };
-
         squareVB->setLayout({
-            {Mana::ShaderDataType::Float3, "a_position"}
-            });
+            {Mana::ShaderDataType::Float3, "a_position"},
+            {Mana::ShaderDataType::Float2, "a_texCoord"}
+        });
 
         m_squareVA->addVertexBuffer(squareVB);
 
@@ -63,7 +66,7 @@ public:
             2, 3, 0
         };
 
-        std::shared_ptr<Mana::IndexBuffer> squareIB;
+        Mana::Ref<Mana::IndexBuffer> squareIB;
         squareIB.reset(Mana::IndexBuffer::Create(squareIndices, sizeof(square) / sizeof(uint32_t)));
         m_squareVA->setIndexBuffer(squareIB);
 
@@ -74,6 +77,7 @@ public:
             layout(location = 1) in vec4 a_color;
 
             uniform mat4 u_viewProjection;
+            uniform mat4 u_transform;
 
             out vec3 v_position;
             out vec4 v_color;
@@ -82,7 +86,7 @@ public:
             {
                 v_position = a_position;
                 v_color = a_color;
-                gl_Position = u_viewProjection * vec4(a_position, 1.0f);
+                gl_Position = u_viewProjection * u_transform * vec4(a_position, 1.0f);
                 
             }
         )";
@@ -97,83 +101,107 @@ public:
 
             void main()
             {
-                color = vec4(v_position * 0.5 + 0.5, 1.0f);
+                color = vec4(v_position, 1.0f);
                 color = v_color;
             }
         )";
 
-        m_shader.reset(new Mana::Shader(vertexSource, fragmentSource));
+        m_shader.reset(Mana::Shader::Create(vertexSource, fragmentSource));
 
-        std::string squareVertSource = R"(
+        std::string flatColorVertSrc = R"(
             #version 330 core
             
             layout(location = 0) in vec3 a_position;
 
             uniform mat4 u_viewProjection;
+            uniform mat4 u_transform;
 
             out vec3 v_position;
 
             void main()
             {
                 v_position = a_position;
-                gl_Position = u_viewProjection * vec4(a_position, 1.0f);
+                gl_Position = u_viewProjection * u_transform * vec4(a_position, 1.0f);
                 
             }
         )";
 
-        std::string squareFragSource = R"(
+        std::string flatColorShaderFragSrc = R"(
             #version 330 core
             
             layout(location = 0) out vec4 color;
 
             in vec3 v_position;
 
+            uniform vec3 u_color;
+
             void main()
             {
-                color = vec4(0.33f, 0.0f, 0.66f, 1.0f);
+                color = vec4(u_color, 1.0f);
             }
         )";
 
-        m_squareShader.reset(new Mana::Shader(squareVertSource, squareFragSource));
+        m_flatColorShader.reset(Mana::Shader::Create(flatColorVertSrc, flatColorShaderFragSrc));
+
+        m_textureShader.reset(Mana::Shader::Create("assets/shaders/Texture.glsl"));
+
+        m_texture = Mana::Texture2D::Create("assets/textures/Checkerboard.png");
+        m_mario = Mana::Texture2D::Create("assets/textures/mario.png");
+
+        std::dynamic_pointer_cast<Mana::OpenGLShader>(m_textureShader)->bind();
+        std::dynamic_pointer_cast<Mana::OpenGLShader>(m_textureShader)->uploadUniformInt("u_texture", 0);
     }
 
-    void onUpdate() override
+    void onUpdate(Mana::TimeStep timeStep) override
     {
+        //MA_TRACE("Delta time: {0}s ({1}ms)", timeStep.getSeconds(), timeStep.getMilliseconds());
+
         if(Mana::Input::isKeyPressed(MA_KEY_A))
-            m_cameraPosition.x -= m_cameraMoveSpeed;
-        else if (Mana::Input::isKeyPressed(MA_KEY_D))
-            m_cameraPosition.x += m_cameraMoveSpeed;
+            m_cameraPosition.x -= m_cameraMoveSpeed * timeStep;
+        else if (Mana::Input::isKeyPressed(MA_KEY_D))  
+            m_cameraPosition.x += m_cameraMoveSpeed * timeStep;
 
         if (Mana::Input::isKeyPressed(MA_KEY_W))
-            m_cameraPosition.y += m_cameraMoveSpeed;
+            m_cameraPosition.y += m_cameraMoveSpeed * timeStep;
         else if (Mana::Input::isKeyPressed(MA_KEY_S))
-            m_cameraPosition.y -= m_cameraMoveSpeed;
-
-        if (Mana::Input::isKeyPressed(MA_KEY_LEFT))
-            m_cameraPosition.x -= m_cameraMoveSpeed;
-        else if (Mana::Input::isKeyPressed(MA_KEY_RIGHT))
-            m_cameraPosition.x += m_cameraMoveSpeed;
-
-        if (Mana::Input::isKeyPressed(MA_KEY_UP))
-            m_cameraPosition.y += m_cameraMoveSpeed;
-        else if (Mana::Input::isKeyPressed(MA_KEY_DOWN))
-            m_cameraPosition.y -= m_cameraMoveSpeed;
+            m_cameraPosition.y -= m_cameraMoveSpeed * timeStep;
 
         if (Mana::Input::isKeyPressed(MA_KEY_Q))
-            m_cameraRotation += m_cameraRotationSpeed;
+            m_cameraRotation += m_cameraRotationSpeed * timeStep;
         else if (Mana::Input::isKeyPressed(MA_KEY_E))
-            m_cameraRotation -= m_cameraRotationSpeed;
+            m_cameraRotation -= m_cameraRotationSpeed * timeStep;
 
         Mana::RenderCommand::setClearColor({ 0.15f, 0.15f, 0.15f, 1 });
         Mana::RenderCommand::clear();
 
         m_camera.setPosition(m_cameraPosition);
-        m_camera.setRotaion(m_cameraRotation);
+        m_camera.setRotation(m_cameraRotation);
 
         Mana::Renderer::beginScene(m_camera);
 
-        Mana::Renderer::submit(m_squareShader, m_squareVA);
-        Mana::Renderer::submit(m_shader, m_vertexArray);
+        static glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
+
+        std::dynamic_pointer_cast<Mana::OpenGLShader>(m_flatColorShader)->bind();
+        std::dynamic_pointer_cast<Mana::OpenGLShader>(m_flatColorShader)->uploadUniformFloat3("u_color", m_squareColor);
+
+
+        for(int y = 0; y < 20; y++)
+        {
+            for (int x = 0; x < 20; x++) 
+            {
+                glm::vec3 pos(x * 0.11f, y * 0.11f, 0.0f);
+                glm::mat4 transform = glm::translate(glm::mat4(1.0f), pos) * scale;
+                Mana::Renderer::submit(m_flatColorShader, m_squareVA, transform);
+            }
+        }
+
+        m_texture->bind();
+        Mana::Renderer::submit(m_textureShader, m_squareVA, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
+
+        m_mario->bind();
+        Mana::Renderer::submit(m_textureShader, m_squareVA, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
+
+        //Mana::Renderer::submit(m_shader, m_vertexArray);
 
         Mana::Renderer::endScene();
     }
@@ -189,23 +217,33 @@ public:
 
     void onImGuiRender() override
     {
-        
+        ImGui::Begin("Settings");
+
+        ImGui::ColorPicker3("Square Color Picker", glm::value_ptr(m_squareColor));
+
+        ImGui::End();
     }
 
 private:
-    std::shared_ptr<Mana::Shader> m_shader;
-    std::shared_ptr<Mana::VertexArray> m_vertexArray;
+    Mana::Ref<Mana::Shader> m_shader;
+    Mana::Ref<Mana::VertexArray> m_vertexArray;
 
     //test
-    std::shared_ptr<Mana::Shader> m_squareShader;
-    std::shared_ptr<Mana::VertexArray> m_squareVA;
+    Mana::Ref<Mana::Shader> m_flatColorShader, m_textureShader;
+    Mana::Ref<Mana::VertexArray> m_squareVA;
+
+    Mana::Ref<Mana::Texture2D> m_texture, m_mario;
 
     Mana::OrthographicCamera m_camera;
+
     glm::vec3 m_cameraPosition;
-    float m_cameraMoveSpeed = 0.1f;
+    float m_cameraMoveSpeed = 5.0f;
 
     float m_cameraRotation = 0.0f;
-    float m_cameraRotationSpeed = 2.0f;
+    float m_cameraRotationSpeed = 180.0f;
+
+    glm::vec3 m_squareColor = { 0.33f, 0.0f, 0.66f};
+
 };
 
 class Sandbox : public Mana::Application

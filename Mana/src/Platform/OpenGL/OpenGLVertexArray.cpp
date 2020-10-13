@@ -46,7 +46,7 @@ namespace Mana {
         glBindVertexArray(0);
     }
 
-    void OpenGLVertexArray::addVertexBuffer(const std::shared_ptr<VertexBuffer>& vertexBuffer)
+    void OpenGLVertexArray::addVertexBuffer(const Ref<VertexBuffer>& vertexBuffer)
     {
         MA_CORE_ASSERT(vertexBuffer->getLayout().getElements().size(), "Vertexbuffer has no layout");
 
@@ -67,7 +67,7 @@ namespace Mana {
         m_vertexBuffers.push_back(vertexBuffer);
     }
 
-    void OpenGLVertexArray::setIndexBuffer(const std::shared_ptr<IndexBuffer>& indexBuffer)
+    void OpenGLVertexArray::setIndexBuffer(const Ref<IndexBuffer>& indexBuffer)
     {
         glBindVertexArray(m_rendererID);
         indexBuffer->bind();

@@ -14,6 +14,8 @@
 #include "Mana/Layer.h"
 #include "Mana/Log.h"
 
+#include "Mana/Core/TimeStep.h"
+
 #include "Mana/Input.h"
 #include "Mana/KeyCodes.h"
 #include "Mana/MouseButtonCodes.h"
@@ -26,6 +28,7 @@
 
 #include "Mana/Render/Buffer.h"
 #include "Mana/Render/Shader.h"
+#include "Mana/Render/Texture.h"
 #include "Mana/Render/VertexArray.h"
 
 #include "Mana/Render/OrthographicCamera.h"

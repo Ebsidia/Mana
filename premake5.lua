@@ -18,6 +18,7 @@ IncludeDir["GLFW"] = "Mana/vendor/GLFW/include"
 IncludeDir["GLAD"] = "Mana/vendor/GLAD/include"
 IncludeDir["ImGui"] = "Mana/vendor/ImGui"
 IncludeDir["glm"] = "Mana/vendor/glm"
+IncludeDir["stb_image"] = "Mana/vendor/stb_image"
 
 include "Mana/vendor/GLFW" -- includes the premake5.lua file from "Mana/vendor/GLFW"
 include "Mana/vendor/GLAD"
@@ -40,6 +41,8 @@ project "Mana"
     {
         "%{prj.name}/src/**.h",
         "%{prj.name}/src/**.cpp",
+        "%{prj.name}/vendor/stb_image/**.h",
+        "%{prj.name}/vendor/stb_image/**.cpp",
         "%{prj.name}/vendor/glm/glm/**.hpp",
         "%{prj.name}/vendor/glm/glm/**.inl"
     }
@@ -56,7 +59,8 @@ project "Mana"
         "%{IncludeDir.GLFW}",
         "%{IncludeDir.GLAD}",
         "%{IncludeDir.ImGui}",
-        "%{IncludeDir.glm}"
+        "%{IncludeDir.glm}",
+        "%{IncludeDir.stb_image}"
     }
 
     links

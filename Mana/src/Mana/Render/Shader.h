@@ -1,20 +1,17 @@
 #pragma once
 
 #include "string"
-#include <glm/glm.hpp>
 
 namespace Mana {
     class Shader
     {
     public:
-        Shader(const std::string& vertexSource, const std::string& fragmentSource);
-        ~Shader();
+        virtual ~Shader() = default;
 
-        void bind();
-        void unbind();
+        virtual void bind() const = 0;
+        virtual void unbind() const = 0;
 
-        void uploadUniformMat4(const std::string& name, const glm::mat4& matrix);
-    private:
-        unsigned int m_rendererID;
+        static Shader* Create(const std::string& filePath);
+        static Shader* Create(const std::string& vertexSource, const std::string& fragmentSource);
     };
 }

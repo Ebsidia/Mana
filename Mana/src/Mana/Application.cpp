@@ -7,9 +7,9 @@
 
 #include "Mana/Input.h"
 
+#include <GLFW/glfw3.h>
 
 #include "Mana/KeyCodes.h"
-#include "mana/MouseButtonCodes.h"
 
 namespace Mana {
 
@@ -20,8 +20,11 @@ namespace Mana {
         MA_CORE_ASSERT(!s_instance, "Appication already exists!");
         s_instance = this;
 
-        m_window = std::unique_ptr<Window>(Window::Create());
+        m_window = Scope<Window>(Window::Create());
         m_window->setEventCallback(MA_BIND_EVENT_FN(Application::onEvent));
+        m_window->setVSync(true);
+
+        Renderer::init();
 
         m_imguiLayer = new ImGuiLayer;
         pushOverlay(m_imguiLayer);
@@ -34,19 +37,15 @@ namespace Mana {
 
     void Application::run()
     {
-        //m_camera.setPosition({ 0.5f, 0.5f, 0.0f });
-        //m_camera.setRotaion(270.0f);
-
-        float x = 0.0f;
-        float y = 0.0f;
-        float r = 0.0f;
-
 
         while (m_running)
         {
+            float time = (float)glfwGetTime();
+            TimeStep timeStep = time - m_lastFrameTime;
+            m_lastFrameTime = time;
 
             for (Layer* layer : m_layerStack)
-                layer->onUpdate();
+                layer->onUpdate(timeStep);
 
             m_imguiLayer->begin();
             for (Layer* layer : m_layerStack)
@@ -65,8 +64,9 @@ namespace Mana {
     {
         EventDispatcher dispatcher(event);
         dispatcher.Dispatch<WindowClosedEvent>(MA_BIND_EVENT_FN(Application::onWindowClosed));
-
+        dispatcher.Dispatch<KeyPressedEvent>(MA_BIND_EVENT_FN(Application::onKeyPressed));
         //MA_CORE_TRACE("{0}", event);
+        
 
         for (auto it = m_layerStack.end(); it != m_layerStack.begin();)
         {
@@ -74,6 +74,23 @@ namespace Mana {
             if (event.handled)
                 break;
         }
+    }
+
+    //Temporary function to toggle VSync to test TimeStep
+    bool Application::onKeyPressed(KeyPressedEvent& event)
+    {
+        if (Input::isKeyPressed(MA_KEY_F1) && m_window->isVSync() == true)
+        {
+            m_window->setVSync(false);
+            MA_CORE_INFO("VSync: {0}", m_window->isVSync());
+        }
+        else if (Input::isKeyPressed(MA_KEY_F1) && m_window->isVSync() == false)
+        {
+            m_window->setVSync(true);
+            MA_CORE_INFO("VSync: {0}", m_window->isVSync());
+        }
+
+        return false;
     }
 
     void Application::pushLayer(Layer* layer)

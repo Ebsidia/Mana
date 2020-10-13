@@ -2,6 +2,7 @@
 
 
 #include "Mana/core.h"
+#include "Mana/Core/TimeStep.h"
 #include "Mana/Events/Event.h"
 
 namespace Mana
@@ -14,7 +15,7 @@ namespace Mana
 
         virtual void onAttach() {}
         virtual void onDetach() {}
-        virtual void onUpdate() {}
+        virtual void onUpdate(TimeStep timeStep) {}
         virtual void onImGuiRender() {}
         virtual void onEvent(Event& event) {}
         
