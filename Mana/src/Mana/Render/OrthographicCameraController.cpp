@@ -17,21 +17,38 @@ namespace Mana {
         float moveSpeed = m_zoomLevel;
 
         if (Input::isKeyPressed(MA_KEY_A))
-            m_cameraPosition.x -= m_cameraTranslationSpeed * moveSpeed * dt;
+        {
+            m_cameraPosition.x -= cos(glm::radians(m_cameraRotation)) * m_cameraTranslationSpeed * dt;
+            m_cameraPosition.y -= sin(glm::radians(m_cameraRotation)) * m_cameraTranslationSpeed * dt;
+        }
         else if (Input::isKeyPressed(MA_KEY_D))
-            m_cameraPosition.x += m_cameraTranslationSpeed * moveSpeed * dt;
+        {
+            m_cameraPosition.x += cos(glm::radians(m_cameraRotation)) * m_cameraTranslationSpeed * dt;
+            m_cameraPosition.y += sin(glm::radians(m_cameraRotation)) * m_cameraTranslationSpeed * dt;
+        }
 
         if (Input::isKeyPressed(MA_KEY_W))
-            m_cameraPosition.y += m_cameraTranslationSpeed * moveSpeed * dt;
+        {
+            m_cameraPosition.x += -sin(glm::radians(m_cameraRotation)) * m_cameraTranslationSpeed * dt;
+            m_cameraPosition.y += cos(glm::radians(m_cameraRotation)) * m_cameraTranslationSpeed * dt;
+        }
         else if (Input::isKeyPressed(MA_KEY_S))
-            m_cameraPosition.y -= m_cameraTranslationSpeed * moveSpeed * dt;
+        {
+            m_cameraPosition.x -= -sin(glm::radians(m_cameraRotation)) * m_cameraTranslationSpeed * dt;
+            m_cameraPosition.y -= cos(glm::radians(m_cameraRotation)) * m_cameraTranslationSpeed * dt;
+        }
 
         if(m_rotation)
         {
             if (Input::isKeyPressed(MA_KEY_Q))
                 m_cameraRotation += m_cameraRotationSpeed * dt;
-            else if (Input::isKeyPressed(MA_KEY_E))
+            if (Input::isKeyPressed(MA_KEY_E))
                 m_cameraRotation -= m_cameraRotationSpeed * dt;
+
+            if (m_cameraRotation > 180.0f)
+                m_cameraRotation -= 360.0f;
+            else if (m_cameraRotation <= -180.0f)
+                m_cameraRotation += 360.0f;
 
             m_camera.setRotation(m_cameraRotation);
         }
