@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Mana/Input.h"
+#include "Mana/Core/Input.h"
 
 namespace Mana {
     class WindowsInput : public Input 

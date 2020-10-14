@@ -1,6 +1,6 @@
 #include "mapch.h"
 #include "Platform/Windows/WindowsInput.h"
-#include "Mana/Application.h"
+#include "Mana/Core/Application.h"
 
 #include <GLFW/glfw3.h>
 

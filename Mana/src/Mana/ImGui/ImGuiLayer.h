@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Mana/Layer.h"
+#include "Mana/Core/Layer.h"
 
 #include "Mana/Events/ApplicationEvent.h"
 #include "Mana/Events/KeyEvent.h"

@@ -3,7 +3,7 @@
 #include "Mana/Render/Shader.h"
 #include "glm/glm.hpp"
 
-//tempory
+//temporary
 typedef unsigned int GLenum;
 
 namespace Mana {
@@ -11,11 +11,13 @@ namespace Mana {
     {
     public:
         OpenGLShader(const std::string& filePath);
-        OpenGLShader(const std::string& vertexSource, const std::string& fragmentSource);
+        OpenGLShader(const std::string& name, const std::string& vertexSource, const std::string& fragmentSource);
         virtual ~OpenGLShader();
 
         virtual void bind() const override;
         virtual void unbind() const override;
+
+        virtual const std::string& getName() const override { return m_name; }
 
         void uploadUniformInt(const std::string& name, int values);
 
@@ -32,5 +34,6 @@ namespace Mana {
         void compile(const std::unordered_map<GLenum, std::string>& shaderSources);
     private:
         unsigned int m_rendererID;
+        std::string m_name;
     };
 }

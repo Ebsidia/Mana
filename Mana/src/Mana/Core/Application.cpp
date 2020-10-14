@@ -5,11 +5,11 @@
 
 #include "Mana/Render/Renderer.h"
 
-#include "Mana/Input.h"
+#include "Mana/Core/Input.h"
 
 #include <GLFW/glfw3.h>
 
-#include "Mana/KeyCodes.h"
+#include "Mana/Core/KeyCodes.h"
 
 namespace Mana {
 
@@ -44,8 +44,11 @@ namespace Mana {
             TimeStep timeStep = time - m_lastFrameTime;
             m_lastFrameTime = time;
 
-            for (Layer* layer : m_layerStack)
-                layer->onUpdate(timeStep);
+            if (!m_minimized) 
+            {
+                for (Layer* layer : m_layerStack)
+                    layer->onUpdate(timeStep);
+            }
 
             m_imguiLayer->begin();
             for (Layer* layer : m_layerStack)
@@ -64,6 +67,7 @@ namespace Mana {
     {
         EventDispatcher dispatcher(event);
         dispatcher.Dispatch<WindowClosedEvent>(MA_BIND_EVENT_FN(Application::onWindowClosed));
+        dispatcher.Dispatch<WindowResizeEvent>(MA_BIND_EVENT_FN(Application::onWindowResize));
         dispatcher.Dispatch<KeyPressedEvent>(MA_BIND_EVENT_FN(Application::onKeyPressed));
         //MA_CORE_TRACE("{0}", event);
         
@@ -74,23 +78,6 @@ namespace Mana {
             if (event.handled)
                 break;
         }
-    }
-
-    //Temporary function to toggle VSync to test TimeStep
-    bool Application::onKeyPressed(KeyPressedEvent& event)
-    {
-        if (Input::isKeyPressed(MA_KEY_F1) && m_window->isVSync() == true)
-        {
-            m_window->setVSync(false);
-            MA_CORE_INFO("VSync: {0}", m_window->isVSync());
-        }
-        else if (Input::isKeyPressed(MA_KEY_F1) && m_window->isVSync() == false)
-        {
-            m_window->setVSync(true);
-            MA_CORE_INFO("VSync: {0}", m_window->isVSync());
-        }
-
-        return false;
     }
 
     void Application::pushLayer(Layer* layer)
@@ -111,5 +98,36 @@ namespace Mana {
         m_running = false;
 
         return true;
+    }
+
+    bool Application::onWindowResize(WindowResizeEvent& event)
+    {
+        if (event.getWidth() == 0 || event.getHeight() == 0)
+        {
+            m_minimized = true;
+            return false;
+        }
+
+        m_minimized = false;
+
+        Renderer::onWindowResize(event.getWidth(), event.getHeight());
+
+        return false;
+    }
+
+    bool Application::onKeyPressed(KeyPressedEvent& event)
+    {
+        if (Input::isKeyPressed(MA_KEY_F1) && m_window->isVSync() == true)
+        {
+            m_window->setVSync(false);
+            MA_CORE_INFO("VSync: {0}", m_window->isVSync());
+        }
+        else if (Input::isKeyPressed(MA_KEY_F1) && m_window->isVSync() == false)
+        {
+            m_window->setVSync(true);
+            MA_CORE_INFO("VSync: {0}", m_window->isVSync());
+        }
+
+        return false;
     }
 }

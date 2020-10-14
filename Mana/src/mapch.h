@@ -8,12 +8,13 @@
 
 #include <string>
 #include <sstream>
+#include <array>
 #include <vector>
 #include <unordered_map>
 #include <unordered_set>
 
-#include "Mana/Log.h"
-#include "Mana/core.h"
+#include "Mana/Core/Log.h"
+#include "Mana/Core/core.h"
 
 #ifdef MA_PLATFORM_WINDOWS
     #include <windows.h>

@@ -57,14 +57,38 @@
     <ClInclude Include="src\Mana.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\Mana\Application.h">
-      <Filter>src\Mana</Filter>
+    <ClInclude Include="src\Mana\Core\Application.h">
+      <Filter>src\Mana\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Mana\Core\EntryPoint.h">
+      <Filter>src\Mana\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Mana\Core\Input.h">
+      <Filter>src\Mana\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Mana\Core\KeyCodes.h">
+      <Filter>src\Mana\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Mana\Core\Layer.h">
+      <Filter>src\Mana\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Mana\Core\LayerStack.h">
+      <Filter>src\Mana\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Mana\Core\Log.h">
+      <Filter>src\Mana\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Mana\Core\MouseButtonCodes.h">
+      <Filter>src\Mana\Core</Filter>
     </ClInclude>
     <ClInclude Include="src\Mana\Core\TimeStep.h">
       <Filter>src\Mana\Core</Filter>
     </ClInclude>
-    <ClInclude Include="src\Mana\EntryPoint.h">
-      <Filter>src\Mana</Filter>
+    <ClInclude Include="src\Mana\Core\Window.h">
+      <Filter>src\Mana\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Mana\Core\core.h">
+      <Filter>src\Mana\Core</Filter>
     </ClInclude>
     <ClInclude Include="src\Mana\Events\ApplicationEvent.h">
       <Filter>src\Mana\Events</Filter>
@@ -81,24 +105,6 @@
     <ClInclude Include="src\Mana\ImGui\ImGuiLayer.h">
       <Filter>src\Mana\ImGui</Filter>
     </ClInclude>
-    <ClInclude Include="src\Mana\Input.h">
-      <Filter>src\Mana</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Mana\KeyCodes.h">
-      <Filter>src\Mana</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Mana\Layer.h">
-      <Filter>src\Mana</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Mana\LayerStack.h">
-      <Filter>src\Mana</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Mana\Log.h">
-      <Filter>src\Mana</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Mana\MouseButtonCodes.h">
-      <Filter>src\Mana</Filter>
-    </ClInclude>
     <ClInclude Include="src\Mana\Render\Buffer.h">
       <Filter>src\Mana\Render</Filter>
     </ClInclude>
@@ -106,6 +112,9 @@
       <Filter>src\Mana\Render</Filter>
     </ClInclude>
     <ClInclude Include="src\Mana\Render\OrthographicCamera.h">
+      <Filter>src\Mana\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Mana\Render\OrthographicCameraController.h">
       <Filter>src\Mana\Render</Filter>
     </ClInclude>
     <ClInclude Include="src\Mana\Render\RenderCommand.h">
@@ -125,12 +134,6 @@
     </ClInclude>
     <ClInclude Include="src\Mana\Render\VertexArray.h">
       <Filter>src\Mana\Render</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Mana\Window.h">
-      <Filter>src\Mana</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Mana\core.h">
-      <Filter>src\Mana</Filter>
     </ClInclude>
     <ClInclude Include="src\Platform\OpenGL\OpenGLBuffer.h">
       <Filter>src\Platform\OpenGL</Filter>
@@ -1388,8 +1391,17 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Mana\Application.cpp">
-      <Filter>src\Mana</Filter>
+    <ClCompile Include="src\Mana\Core\Application.cpp">
+      <Filter>src\Mana\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Mana\Core\Layer.cpp">
+      <Filter>src\Mana\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Mana\Core\LayerStack.cpp">
+      <Filter>src\Mana\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Mana\Core\Log.cpp">
+      <Filter>src\Mana\Core</Filter>
     </ClCompile>
     <ClCompile Include="src\Mana\ImGui\ImGuiBuild.cpp">
       <Filter>src\Mana\ImGui</Filter>
@@ -1397,19 +1409,13 @@
     <ClCompile Include="src\Mana\ImGui\ImGuiLayer.cpp">
       <Filter>src\Mana\ImGui</Filter>
     </ClCompile>
-    <ClCompile Include="src\Mana\Layer.cpp">
-      <Filter>src\Mana</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Mana\LayerStack.cpp">
-      <Filter>src\Mana</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Mana\Log.cpp">
-      <Filter>src\Mana</Filter>
-    </ClCompile>
     <ClCompile Include="src\Mana\Render\Buffer.cpp">
       <Filter>src\Mana\Render</Filter>
     </ClCompile>
     <ClCompile Include="src\Mana\Render\OrthographicCamera.cpp">
+      <Filter>src\Mana\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Mana\Render\OrthographicCameraController.cpp">
       <Filter>src\Mana\Render</Filter>
     </ClCompile>
     <ClCompile Include="src\Mana\Render\RenderCommand.cpp">

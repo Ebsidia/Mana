@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Mana/Window.h"
+#include "Mana/Core/Window.h"
 #include "Mana/Render/GraphicsContext.h"
 
 #include "GLFW/glfw3.h"

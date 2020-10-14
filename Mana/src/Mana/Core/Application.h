@@ -12,13 +12,13 @@
 #include "core.h"
 
 #include "Window.h"
-#include "Mana/LayerStack.h"
-#include "Events/Event.h"
-#include "Events/ApplicationEvent.h"
+#include "Mana/Core/LayerStack.h"
+#include "Mana/Events/Event.h"
+#include "Mana/Events/ApplicationEvent.h"
 
 #include "Mana/Core/TimeStep.h"
 
-#include "ImGui/ImGuiLayer.h"
+#include "Mana/ImGui/ImGuiLayer.h"
 
 namespace Mana {
 
@@ -31,7 +31,6 @@ namespace Mana {
         void run();
 
         void onEvent(Event& event);
-        bool onKeyPressed(KeyPressedEvent& event);
 
         void pushLayer(Layer* layer);
         void pushOverlay(Layer* overlay);
@@ -41,11 +40,14 @@ namespace Mana {
 
     private:
         bool onWindowClosed(WindowClosedEvent& event);
+        bool onWindowResize(WindowResizeEvent& event);
+        bool onKeyPressed(KeyPressedEvent& event);
 
     private:
         std::unique_ptr<Window> m_window;
         ImGuiLayer* m_imguiLayer;
         bool m_running = true;
+        bool m_minimized = false;
 
         LayerStack m_layerStack;
 

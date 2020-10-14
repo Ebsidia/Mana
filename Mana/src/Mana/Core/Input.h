@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Mana/core.h"
+#include "Mana/Core/core.h"
 
 namespace Mana {
     class MANA_API Input 

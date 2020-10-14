@@ -10,15 +10,16 @@
    
 *******************************************************************************/
 
-#include "Mana/Application.h"
-#include "Mana/Layer.h"
-#include "Mana/Log.h"
+#include "Mana/Core/Application.h"
+#include "Mana/Core/Layer.h"
+#include "Mana/Core/Log.h"
 
 #include "Mana/Core/TimeStep.h"
 
-#include "Mana/Input.h"
-#include "Mana/KeyCodes.h"
-#include "Mana/MouseButtonCodes.h"
+#include "Mana/Core/Input.h"
+#include "Mana/Core/KeyCodes.h"
+#include "Mana/Core/MouseButtonCodes.h"
+#include "Mana/Render/OrthographicCameraController.h"
 
 #include "Mana/ImGui/ImGuiLayer.h"
 
@@ -32,8 +33,9 @@
 #include "Mana/Render/VertexArray.h"
 
 #include "Mana/Render/OrthographicCamera.h"
+
 //----------------Render--------------
 
 //----------------Entry Point--------------
-#include "Mana/EntryPoint.h"
+#include "Mana/Core/EntryPoint.h"
 //----------------Entry Point--------------

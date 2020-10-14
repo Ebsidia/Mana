@@ -1,7 +1,7 @@
 #pragma once
 
 #include <string>
-#include "Mana/core.h"
+#include "Mana/Core/core.h"
 
 namespace Mana {
 

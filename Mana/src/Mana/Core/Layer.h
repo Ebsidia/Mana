@@ -1,7 +1,7 @@
 #pragma once
 
 
-#include "Mana/core.h"
+#include "Mana/Core/core.h"
 #include "Mana/Core/TimeStep.h"
 #include "Mana/Events/Event.h"
 

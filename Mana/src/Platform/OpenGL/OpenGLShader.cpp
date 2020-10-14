@@ -26,9 +26,19 @@ namespace Mana {
 
         compile(shaderSource);
 
+        //extract name from filepath
+        auto lastSlash = filePath.find_last_of("/\\");
+        lastSlash = lastSlash == std::string::npos ? 0 : lastSlash + 1;
+
+        auto lastDot = filePath.rfind('.');
+
+        auto count = lastDot == std::string::npos ? filePath.size() - lastSlash : lastDot - lastSlash;
+        m_name = filePath.substr(lastSlash, count);
+
     }
 
-    OpenGLShader::OpenGLShader(const std::string& vertexSource, const std::string& fragmentSource)
+    OpenGLShader::OpenGLShader(const std::string& name, const std::string& vertexSource, const std::string& fragmentSource)
+        : m_name(name)
     {
         std::unordered_map<GLenum, std::string> sources;
         sources[GL_VERTEX_SHADER] = vertexSource;
@@ -46,7 +56,7 @@ namespace Mana {
     std::string OpenGLShader::readFile(const std::string& filePath)
     {
         std::string result;
-        std::ifstream in(filePath, std::ios::in, std::ios::binary);
+        std::ifstream in(filePath, std::ios::in | std::ios::binary);
 
         if (in)
         {
@@ -94,8 +104,11 @@ namespace Mana {
     {
         GLuint program = glCreateProgram();
 
-        std::vector<GLenum>glShaderIDs(shaderSources.size());
+        MA_CORE_ASSERT(shaderSources.size() <= 2, "Only support vertex and fragment shaders at the moment!");
 
+        std::array<GLenum, 2>glShaderIDs;
+
+        int glShaderIDIndex = 0;
         for (auto& kv : shaderSources)
         {
             GLenum shaderType = kv.first;
@@ -126,7 +139,7 @@ namespace Mana {
                 break;
             }
             glAttachShader(program, shader);
-            glShaderIDs.push_back(shader);
+            glShaderIDs[glShaderIDIndex++] = shader;
         }
 
         glLinkProgram(program);

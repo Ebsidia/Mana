@@ -8,11 +8,12 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 
+
 class ExampleLayer : public Mana::Layer
 {
 public:
     ExampleLayer()
-        : Layer("Example"), m_camera(-1.6f, 1.6f, -0.9f, 0.9f), m_cameraPosition(0.0f)
+        : Layer("Example"), m_cameraController(1280.0f / 720.0f, true)
     {
         m_vertexArray.reset(Mana::VertexArray::Create());
 
@@ -106,7 +107,7 @@ public:
             }
         )";
 
-        m_shader.reset(Mana::Shader::Create(vertexSource, fragmentSource));
+        m_shader = Mana::Shader::Create("triangleShader", vertexSource, fragmentSource);
 
         std::string flatColorVertSrc = R"(
             #version 330 core
@@ -141,43 +142,28 @@ public:
             }
         )";
 
-        m_flatColorShader.reset(Mana::Shader::Create(flatColorVertSrc, flatColorShaderFragSrc));
+        m_flatColorShader = Mana::Shader::Create("flatColor", flatColorVertSrc, flatColorShaderFragSrc);
 
-        m_textureShader.reset(Mana::Shader::Create("assets/shaders/Texture.glsl"));
+       auto textureShader = m_shaderLibrary.load("assets/shaders/Texture.glsl");
 
         m_texture = Mana::Texture2D::Create("assets/textures/Checkerboard.png");
         m_mario = Mana::Texture2D::Create("assets/textures/mario.png");
 
-        std::dynamic_pointer_cast<Mana::OpenGLShader>(m_textureShader)->bind();
-        std::dynamic_pointer_cast<Mana::OpenGLShader>(m_textureShader)->uploadUniformInt("u_texture", 0);
+        std::dynamic_pointer_cast<Mana::OpenGLShader>(textureShader)->bind();
+        std::dynamic_pointer_cast<Mana::OpenGLShader>(textureShader)->uploadUniformInt("u_texture", 0);
     }
 
     void onUpdate(Mana::TimeStep timeStep) override
     {
         //MA_TRACE("Delta time: {0}s ({1}ms)", timeStep.getSeconds(), timeStep.getMilliseconds());
 
-        if(Mana::Input::isKeyPressed(MA_KEY_A))
-            m_cameraPosition.x -= m_cameraMoveSpeed * timeStep;
-        else if (Mana::Input::isKeyPressed(MA_KEY_D))  
-            m_cameraPosition.x += m_cameraMoveSpeed * timeStep;
-
-        if (Mana::Input::isKeyPressed(MA_KEY_W))
-            m_cameraPosition.y += m_cameraMoveSpeed * timeStep;
-        else if (Mana::Input::isKeyPressed(MA_KEY_S))
-            m_cameraPosition.y -= m_cameraMoveSpeed * timeStep;
-
-        if (Mana::Input::isKeyPressed(MA_KEY_Q))
-            m_cameraRotation += m_cameraRotationSpeed * timeStep;
-        else if (Mana::Input::isKeyPressed(MA_KEY_E))
-            m_cameraRotation -= m_cameraRotationSpeed * timeStep;
+        m_cameraController.onUpdate(timeStep);
 
         Mana::RenderCommand::setClearColor({ 0.15f, 0.15f, 0.15f, 1 });
         Mana::RenderCommand::clear();
 
-        m_camera.setPosition(m_cameraPosition);
-        m_camera.setRotation(m_cameraRotation);
 
-        Mana::Renderer::beginScene(m_camera);
+        Mana::Renderer::beginScene(m_cameraController.getCamera());
 
         static glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
 
@@ -195,11 +181,13 @@ public:
             }
         }
 
+        auto textureShader = m_shaderLibrary.get("Texture");
+
         m_texture->bind();
-        Mana::Renderer::submit(m_textureShader, m_squareVA, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
+        Mana::Renderer::submit(textureShader, m_squareVA, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
 
         m_mario->bind();
-        Mana::Renderer::submit(m_textureShader, m_squareVA, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
+        Mana::Renderer::submit(textureShader, m_squareVA, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
 
         //Mana::Renderer::submit(m_shader, m_vertexArray);
 
@@ -208,6 +196,8 @@ public:
 
     virtual void onEvent(Mana::Event& event) override
     {
+        m_cameraController.onEvent(event);
+
         /*if (event.getEventType() == Mana::EventType::KeyPressed)
         {
             Mana::KeyPressedEvent& e = (Mana::KeyPressedEvent & )event;
@@ -225,22 +215,17 @@ public:
     }
 
 private:
+    Mana::ShaderLibrary m_shaderLibrary;
     Mana::Ref<Mana::Shader> m_shader;
     Mana::Ref<Mana::VertexArray> m_vertexArray;
 
     //test
-    Mana::Ref<Mana::Shader> m_flatColorShader, m_textureShader;
+    Mana::Ref<Mana::Shader> m_flatColorShader;
     Mana::Ref<Mana::VertexArray> m_squareVA;
 
     Mana::Ref<Mana::Texture2D> m_texture, m_mario;
 
-    Mana::OrthographicCamera m_camera;
-
-    glm::vec3 m_cameraPosition;
-    float m_cameraMoveSpeed = 5.0f;
-
-    float m_cameraRotation = 0.0f;
-    float m_cameraRotationSpeed = 180.0f;
+    Mana::OrthographicCameraController m_cameraController;
 
     glm::vec3 m_squareColor = { 0.33f, 0.0f, 0.66f};
 
