@@ -1,5 +1,8 @@
 #include "Mana.h"
 
+#include "Mana/Core/EntryPoint.h"
+
+
 #include "Platform/OpenGL/OpenGLShader.h"
 #include "glm/gtc/type_ptr.hpp"
 
@@ -7,6 +10,7 @@
 
 #include <glm/gtc/matrix_transform.hpp>
 
+#include "Sandbox2D.h"
 
 
 class ExampleLayer : public Mana::Layer
@@ -15,7 +19,7 @@ public:
     ExampleLayer()
         : Layer("Example"), m_cameraController(1280.0f / 720.0f, true)
     {
-        m_vertexArray.reset(Mana::VertexArray::Create());
+        m_vertexArray = Mana::VertexArray::Create();
 
         float vertices[3 * 7] = {
             -0.5f, -0.5f, 0.0f, 0.33f, 0.0f, 0.66f, 1.0f,
@@ -43,7 +47,7 @@ public:
         indexBuffer.reset(Mana::IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t)));
         m_vertexArray->setIndexBuffer(indexBuffer);
 
-        m_squareVA.reset(Mana::VertexArray::Create());
+        m_squareVA = Mana::VertexArray::Create();
 
         float square[5 * 4] = {
             -0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
@@ -236,7 +240,8 @@ class Sandbox : public Mana::Application
 public:
     Sandbox()
     {
-        pushLayer(new ExampleLayer());
+        //pushLayer(new ExampleLayer());
+        pushLayer(new Sandbox2D());
     }
 
     ~Sandbox()

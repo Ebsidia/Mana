@@ -25,6 +25,7 @@
 
 //----------------Render--------------
 #include "Mana/Render/Renderer.h"
+#include "Mana/Render/Renderer2D.h"
 #include "Mana/Render/RenderCommand.h"
 
 #include "Mana/Render/Buffer.h"
@@ -34,8 +35,6 @@
 
 #include "Mana/Render/OrthographicCamera.h"
 
+
 //----------------Render--------------
 
-//----------------Entry Point--------------
-#include "Mana/Core/EntryPoint.h"
-//----------------Entry Point--------------

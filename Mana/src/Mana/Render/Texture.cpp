@@ -11,7 +11,19 @@ namespace Mana {
         switch (Renderer::getAPI())
         {
         case RendererAPI::API::None:     MA_CORE_ASSERT(false, "RendererAPI::None is currently not support"); return nullptr;
-        case RendererAPI::API::OpenGL:   return std::make_shared<OpenGLTexture2D>(filePath);
+        case RendererAPI::API::OpenGL:   return CreateRef<OpenGLTexture2D>(filePath);
+        }
+
+        MA_CORE_ASSERT(false, "Unknown Renderer API");
+        return nullptr;
+    }
+
+    Ref<Mana::Texture2D> Texture2D::Create(uint32_t width, uint32_t height)
+    {
+        switch (Renderer::getAPI())
+        {
+        case RendererAPI::API::None:     MA_CORE_ASSERT(false, "RendererAPI::None is currently not support"); return nullptr;
+        case RendererAPI::API::OpenGL:   return CreateRef<OpenGLTexture2D>(width, height);
         }
 
         MA_CORE_ASSERT(false, "Unknown Renderer API");
