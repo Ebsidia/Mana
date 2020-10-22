@@ -12,6 +12,7 @@ namespace Mana {
     {
     public:
         OrthographicCameraController(float aspectRatio, bool rotation = false);
+        OrthographicCameraController(float aspectRatio, float zoomLevel, bool rotation = false);
 
         void onUpdate(TimeStep dt);
         void onEvent(Event& event);
@@ -28,7 +29,7 @@ namespace Mana {
 
     private:
         float m_aspectRatio;
-        float m_zoomLevel = 1.0f;
+        float m_zoomLevel;
         OrthographicCamera m_camera;
 
         bool m_rotation;

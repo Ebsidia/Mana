@@ -213,7 +213,7 @@ public:
     {
         ImGui::Begin("Settings");
 
-        ImGui::ColorPicker3("Square Color Picker", glm::value_ptr(m_squareColor));
+        //ImGui::ColorPicker3("Square Color Picker", glm::value_ptr(m_squareColor));
 
         ImGui::End();
     }

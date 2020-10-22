@@ -24,7 +24,7 @@ private:
 
     glm::vec2 m_cubePosition = { -1.0f, 0.0f };
 
-    float m_cubeMoveSpeed = 5.0f;
+    float m_cubeMoveSpeed = 25.0f;
 
     glm::vec4 m_Color = { 0.33f, 0.0f, 0.66f, 1.0f };
 };

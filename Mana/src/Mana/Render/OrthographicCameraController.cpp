@@ -7,7 +7,13 @@
 namespace Mana {
 
     OrthographicCameraController::OrthographicCameraController(float aspectRatio, bool rotation)
-        : m_aspectRatio(aspectRatio), m_camera(-m_aspectRatio * m_zoomLevel, m_aspectRatio * m_zoomLevel, -m_zoomLevel, m_zoomLevel), m_rotation(rotation)
+        : m_aspectRatio(aspectRatio), m_zoomLevel(1.0f), m_camera(-m_aspectRatio * m_zoomLevel, m_aspectRatio * m_zoomLevel, -m_zoomLevel, m_zoomLevel), m_rotation(rotation)
+    {
+
+    }
+
+    OrthographicCameraController::OrthographicCameraController(float aspectRatio, float zoomLevel, bool rotation)
+        : m_aspectRatio(aspectRatio), m_zoomLevel(zoomLevel),m_camera(-m_aspectRatio * m_zoomLevel, m_aspectRatio* m_zoomLevel, -m_zoomLevel, m_zoomLevel), m_rotation(rotation)
     {
 
     }
@@ -55,7 +61,7 @@ namespace Mana {
 
         m_camera.setPosition(m_cameraPosition);
 
-        //m_cameraTranslationSpeed = m_zoomLevel;
+        m_cameraTranslationSpeed = m_zoomLevel;
     }
 
     void OrthographicCameraController::onEvent(Event& event)
@@ -77,6 +83,7 @@ namespace Mana {
         MA_CORE_INFO("Move Speed: {0}", m_cameraTranslationSpeed * m_zoomLevel);*/
 
         m_camera.setProjection(-m_aspectRatio * m_zoomLevel, m_aspectRatio * m_zoomLevel, -m_zoomLevel, m_zoomLevel);
+
         return false;
     }
 

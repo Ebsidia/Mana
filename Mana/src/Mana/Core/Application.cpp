@@ -48,13 +48,14 @@ namespace Mana {
             {
                 for (Layer* layer : m_layerStack)
                     layer->onUpdate(timeStep);
+
+                m_imguiLayer->begin();
+                for (Layer* layer : m_layerStack)
+                    layer->onImGuiRender();
+
+                m_imguiLayer->end();
             }
 
-            m_imguiLayer->begin();
-            for (Layer* layer : m_layerStack)
-                layer->onImGuiRender();
-
-            m_imguiLayer->end();
 
             //auto [x, y] = Input::getMousPos();
             //MA_CORE_TRACE("{0}, {1}", x, y);
