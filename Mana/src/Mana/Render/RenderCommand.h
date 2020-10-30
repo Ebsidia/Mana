@@ -26,9 +26,9 @@ namespace Mana {
             s_rendererAPI->clear();
         }
 
-        inline static void drawIndexed(const Ref<VertexArray>& vertexArray)
+        inline static void drawIndexed(const Ref<VertexArray>& vertexArray, uint32_t indexCount = 0)
         {
-            s_rendererAPI->drawIndexed(vertexArray);
+            s_rendererAPI->drawIndexed(vertexArray, indexCount);
         }
     private:
         static RendererAPI* s_rendererAPI;

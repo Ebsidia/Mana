@@ -185,6 +185,11 @@ namespace Mana {
         uploadUniformInt(name, value);
     }
 
+    void OpenGLShader::setIntArray(const std::string& name, int* values, uint32_t count)
+    {
+        uploadUniformIntArray(name, values, count);
+    }
+
     void OpenGLShader::setFloat(const std::string& name, float value)
     {
         uploadUniformFloat(name, value);
@@ -214,6 +219,12 @@ namespace Mana {
     {
         GLint location = glGetUniformLocation(m_rendererID, name.c_str());
         glUniform1i(location, values);
+    }
+
+    void OpenGLShader::uploadUniformIntArray(const std::string& name, int* values, uint32_t count)
+    {
+        GLint location = glGetUniformLocation(m_rendererID, name.c_str());
+        glUniform1iv(location, count, values);
     }
 
     void OpenGLShader::uploadUniformFloat(const std::string& name, float values)

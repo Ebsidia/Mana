@@ -14,11 +14,11 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 -- Include Directories relative to root folder
 IncludeDir = {}
-IncludeDir["GLFW"] = "Mana/vendor/GLFW/include"
-IncludeDir["GLAD"] = "Mana/vendor/GLAD/include"
-IncludeDir["ImGui"] = "Mana/vendor/ImGui"
-IncludeDir["glm"] = "Mana/vendor/glm"
-IncludeDir["stb_image"] = "Mana/vendor/stb_image"
+IncludeDir["GLFW"] = "%{wks.location}/Mana/vendor/GLFW/include"
+IncludeDir["GLAD"] = "%{wks.location}/Mana/vendor/GLAD/include"
+IncludeDir["ImGui"] = "%{wks.location}/Mana/vendor/imgui"
+IncludeDir["glm"] = "%{wks.location}/Mana/vendor/glm"
+IncludeDir["stb_image"] = "%{wks.location}/Mana/vendor/stb_image"
 
 include "Mana/vendor/GLFW" -- includes the premake5.lua file from "Mana/vendor/GLFW"
 include "Mana/vendor/GLAD"

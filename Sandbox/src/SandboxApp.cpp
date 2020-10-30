@@ -27,8 +27,7 @@ public:
              0.0f,  0.5f, 0.0f, 0.0f, 0.66f, 0.33f, 1.0f
         };
 
-        Mana::Ref<Mana::VertexBuffer> vertexBuffer;
-        vertexBuffer.reset(Mana::VertexBuffer::Create(vertices, sizeof(vertices)));
+        Mana::Ref<Mana::VertexBuffer> vertexBuffer = Mana::VertexBuffer::Create(vertices, sizeof(vertices));
 
         Mana::BufferLayout layout = {
             {Mana::ShaderDataType::Float3, "a_position"},
@@ -43,8 +42,7 @@ public:
             0, 1, 2
         };
 
-        Mana::Ref<Mana::IndexBuffer> indexBuffer;
-        indexBuffer.reset(Mana::IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t)));
+        Mana::Ref<Mana::IndexBuffer> indexBuffer = Mana::IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t));
         m_vertexArray->setIndexBuffer(indexBuffer);
 
         m_squareVA = Mana::VertexArray::Create();
@@ -56,9 +54,8 @@ public:
             -0.5f,  0.5f, 0.0f, 0.0f, 1.0f
         };
 
-        Mana::Ref<Mana::VertexBuffer> squareVB;
-        squareVB.reset(Mana::VertexBuffer::Create(square, sizeof(square)));
-
+        Mana::Ref<Mana::VertexBuffer> squareVB = Mana::VertexBuffer::Create(square, sizeof(square));
+        
         squareVB->setLayout({
             {Mana::ShaderDataType::Float3, "a_position"},
             {Mana::ShaderDataType::Float2, "a_texCoord"}
@@ -71,8 +68,7 @@ public:
             2, 3, 0
         };
 
-        Mana::Ref<Mana::IndexBuffer> squareIB;
-        squareIB.reset(Mana::IndexBuffer::Create(squareIndices, sizeof(square) / sizeof(uint32_t)));
+        Mana::Ref<Mana::IndexBuffer> squareIB = Mana::IndexBuffer::Create(squareIndices, sizeof(square) / sizeof(uint32_t));
         m_squareVA->setIndexBuffer(squareIB);
 
         std::string vertexSource = R"(

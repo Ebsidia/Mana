@@ -114,7 +114,10 @@ namespace Mana {
         virtual const BufferLayout& getLayout() const = 0;
         virtual void setLayout(const BufferLayout& layout) = 0;
 
-        static VertexBuffer* Create(float* vertices, unsigned int size);
+        virtual void setData(const void* data, uint32_t size) = 0;
+
+        static Ref<VertexBuffer> Create(uint32_t size);
+        static Ref<VertexBuffer> Create(float* vertices, uint32_t size);
     };
 
     class IndexBuffer 
@@ -127,7 +130,7 @@ namespace Mana {
 
         virtual uint32_t getCount() const = 0;
 
-        static IndexBuffer* Create(uint32_t* indices, uint32_t count);
+        static Ref<IndexBuffer> Create(uint32_t* indices, uint32_t count);
     };
 
 }

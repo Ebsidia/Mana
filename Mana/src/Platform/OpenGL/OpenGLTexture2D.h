@@ -21,6 +21,11 @@ namespace Mana {
 
         virtual void bind(uint32_t slot = 0) const override;
 
+        virtual bool operator==(const Texture& other) const override 
+        {
+            return m_rendererID == ((OpenGLTexture2D&)other).m_rendererID;
+        }
+
     private:
         std::string m_filePath;
         uint32_t m_width, m_height;

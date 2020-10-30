@@ -7,13 +7,15 @@
 namespace Mana {
 
     OrthographicCameraController::OrthographicCameraController(float aspectRatio, bool rotation)
-        : m_aspectRatio(aspectRatio), m_zoomLevel(1.0f), m_camera(-m_aspectRatio * m_zoomLevel, m_aspectRatio * m_zoomLevel, -m_zoomLevel, m_zoomLevel), m_rotation(rotation)
+        : m_aspectRatio(aspectRatio), m_zoomLevel(1.0f), m_bounds({ -m_aspectRatio * m_zoomLevel, m_aspectRatio * m_zoomLevel, -m_zoomLevel, m_zoomLevel }),
+          m_camera(m_bounds.Left, m_bounds.Right, m_bounds.Bottom, m_bounds.Top), m_rotation(rotation)
     {
 
     }
 
     OrthographicCameraController::OrthographicCameraController(float aspectRatio, float zoomLevel, bool rotation)
-        : m_aspectRatio(aspectRatio), m_zoomLevel(zoomLevel),m_camera(-m_aspectRatio * m_zoomLevel, m_aspectRatio* m_zoomLevel, -m_zoomLevel, m_zoomLevel), m_rotation(rotation)
+        : m_aspectRatio(aspectRatio), m_zoomLevel(zoomLevel), m_bounds({ -m_aspectRatio * m_zoomLevel, m_aspectRatio * m_zoomLevel, -m_zoomLevel, m_zoomLevel }),
+          m_camera(m_bounds.Left, m_bounds.Right, m_bounds.Bottom, m_bounds.Top), m_rotation(rotation)
     {
 
     }
@@ -75,14 +77,10 @@ namespace Mana {
     bool OrthographicCameraController::onMouseScrolled(MouseScrolledEvent& event)
     {
         m_zoomLevel -= event.getYOffset() * 0.25f;
-        
         m_zoomLevel = std::max(m_zoomLevel, 0.25f);
 
-        /*MA_CORE_INFO("Zoom Level: {0}", m_zoomLevel);
-        MA_CORE_INFO("Translation Speed: {0}", m_cameraTranslationSpeed);
-        MA_CORE_INFO("Move Speed: {0}", m_cameraTranslationSpeed * m_zoomLevel);*/
-
-        m_camera.setProjection(-m_aspectRatio * m_zoomLevel, m_aspectRatio * m_zoomLevel, -m_zoomLevel, m_zoomLevel);
+        m_bounds = { -m_aspectRatio * m_zoomLevel, m_aspectRatio * m_zoomLevel, -m_zoomLevel, m_zoomLevel };
+        m_camera.setProjection(m_bounds.Left, m_bounds.Right, m_bounds.Bottom, m_bounds.Top);
 
         return false;
     }
@@ -90,7 +88,8 @@ namespace Mana {
     bool OrthographicCameraController::onWindowResized(WindowResizeEvent& event)
     {
         m_aspectRatio = (float)event.getWidth() / (float)event.getHeight();
-        m_camera.setProjection(-m_aspectRatio * m_zoomLevel, m_aspectRatio * m_zoomLevel, -m_zoomLevel, m_zoomLevel);
+        m_bounds = { -m_aspectRatio * m_zoomLevel, m_aspectRatio * m_zoomLevel, -m_zoomLevel, m_zoomLevel };
+        m_camera.setProjection(m_bounds.Left, m_bounds.Right, m_bounds.Bottom, m_bounds.Top);
         return false;
     }
 

@@ -1,6 +1,7 @@
 #pragma once
 #include "Mana.h"
 
+#include "ParticleSystem.h"
 
 class Sandbox2D : public Mana::Layer
 {
@@ -21,10 +22,14 @@ private:
     Mana::Ref<Mana::Shader> m_flatColorShader;
     Mana::Ref<Mana::Texture2D> m_checkerBoard;
     Mana::Ref<Mana::Texture2D> m_mario;
+    Mana::Ref<Mana::Texture2D> m_spriteSheet;
 
-    glm::vec2 m_cubePosition = { -1.0f, 0.0f };
+    glm::vec2 m_cubePosition = { -1.0f, 1.0f };
 
-    float m_cubeMoveSpeed = 25.0f;
+    float m_cubeMoveSpeed = 4.0f;
 
-    glm::vec4 m_Color = { 0.33f, 0.0f, 0.66f, 1.0f };
+    glm::vec4 m_Color = { 1.0f, 1.0f, 1.0f, 1.0f };
+
+    ParticleSystem m_particleSystem;
+    ParticleProps m_particle;
 };

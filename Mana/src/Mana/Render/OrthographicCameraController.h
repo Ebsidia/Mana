@@ -8,6 +8,15 @@
 
 namespace Mana {
 
+    struct OrthographicCameraBounds
+    {
+        float Left, Right;
+        float Bottom, Top;
+
+        float GetWidth() { return Right - Left; }
+        float GetHeight() { return Top - Bottom; }
+    };
+
     class OrthographicCameraController
     {
     public:
@@ -23,6 +32,7 @@ namespace Mana {
         float getZoomLevel() const { return m_zoomLevel; }
         void setZoomLevel(float level) { m_zoomLevel = level; }
 
+        const OrthographicCameraBounds& getBounds() const { return m_bounds; }
     private:
         bool onMouseScrolled(MouseScrolledEvent& event);
         bool onWindowResized(WindowResizeEvent& event);
@@ -30,6 +40,7 @@ namespace Mana {
     private:
         float m_aspectRatio;
         float m_zoomLevel;
+        OrthographicCameraBounds m_bounds;
         OrthographicCamera m_camera;
 
         bool m_rotation;
