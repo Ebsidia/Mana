@@ -31,6 +31,7 @@
 #include "Mana/Render/Buffer.h"
 #include "Mana/Render/Shader.h"
 #include "Mana/Render/Texture.h"
+#include "Mana/Render/SubTexture2D.h"
 #include "Mana/Render/VertexArray.h"
 
 #include "Mana/Render/OrthographicCamera.h"

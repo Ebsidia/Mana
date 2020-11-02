@@ -74,13 +74,18 @@ namespace Mana {
         dispatcher.Dispatch<WindowResizeEvent>(MA_BIND_EVENT_FN(OrthographicCameraController::onWindowResized));
     }
 
+    void OrthographicCameraController::calculateView()
+    {
+        m_bounds = { -m_aspectRatio * m_zoomLevel, m_aspectRatio * m_zoomLevel, -m_zoomLevel, m_zoomLevel };
+        m_camera.setProjection(m_bounds.Left, m_bounds.Right, m_bounds.Bottom, m_bounds.Top);
+    }
+
     bool OrthographicCameraController::onMouseScrolled(MouseScrolledEvent& event)
     {
         m_zoomLevel -= event.getYOffset() * 0.25f;
         m_zoomLevel = std::max(m_zoomLevel, 0.25f);
 
-        m_bounds = { -m_aspectRatio * m_zoomLevel, m_aspectRatio * m_zoomLevel, -m_zoomLevel, m_zoomLevel };
-        m_camera.setProjection(m_bounds.Left, m_bounds.Right, m_bounds.Bottom, m_bounds.Top);
+        calculateView();
 
         return false;
     }
@@ -88,8 +93,7 @@ namespace Mana {
     bool OrthographicCameraController::onWindowResized(WindowResizeEvent& event)
     {
         m_aspectRatio = (float)event.getWidth() / (float)event.getHeight();
-        m_bounds = { -m_aspectRatio * m_zoomLevel, m_aspectRatio * m_zoomLevel, -m_zoomLevel, m_zoomLevel };
-        m_camera.setProjection(m_bounds.Left, m_bounds.Right, m_bounds.Bottom, m_bounds.Top);
+        calculateView();
         return false;
     }
 

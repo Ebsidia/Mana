@@ -15,7 +15,12 @@ void Sandbox2D::onAttach()
 {
     m_checkerBoard = Mana::Texture2D::Create("assets/textures/Checkerboard.png");
     m_mario = Mana::Texture2D::Create("assets/textures/mario.png");
-    m_spriteSheet = Mana::Texture2D::Create("assets/textures/mario_characters.png");
+    m_spriteSheet = Mana::Texture2D::Create("assets/game/Spritesheet/RPGpack_sheet_2X.png");
+    m_marioSpriteSheet = Mana::Texture2D::Create("assets/textures/mario_characters.png");
+
+    m_textureStairs = Mana::SubTexture2D::createFromCoords(m_spriteSheet, { 4, 1 }, { 128, 128 }, { 1, 2 });
+    m_smb = Mana::SubTexture2D::createFromCoords(m_marioSpriteSheet, { 1, 8 }, { 8, 16 }, { 1, 1 });
+
 
     m_particle.ColorBegin = { 84 / 255.0f, 0 / 255.0f, 168 / 255.0f, 1.0f };
     m_particle.ColorEnd = { 254 / 255.0f, 109 / 255.0f, 41 / 255.0f, 1.0f };
@@ -24,6 +29,8 @@ void Sandbox2D::onAttach()
     m_particle.Velocity = { 0.0f, 0.0f };
     m_particle.VelocityVariation = { 3.0f, 1.0f };
     m_particle.Position = { 0.0f, 0.0f };
+
+    m_cameraController.setZoomLevel(5.0f);
 }
 
 void Sandbox2D::onDetach()
@@ -66,25 +73,25 @@ void Sandbox2D::onUpdate(Mana::TimeStep dt)
     Mana::Renderer2D::drawQuad(glm::vec3(0.0f, 0.0f, -0.2f), { 20.0f, 20.0f }, m_checkerBoard, 10.0f, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
     Mana::Renderer2D::drawQuad({ -0.75, 0.5f, 0.0f}, { 0.8f, 0.8f }, glm::vec4(0.8f, 0.2f, 0.3f, 1.0f));
     Mana::Renderer2D::drawQuad({  0.5f,-0.5f, 0.0f}, { 0.5f, 0.75f }, glm::vec4(0.2f, 0.3f, 0.8f, 1.0f));
-    Mana::Renderer2D::drawRotatedQuad({ -2.0f, 0.0f, 0.0f }, { 1.0f, 1.0f }, glm::radians(rotation), m_checkerBoard, 10.0f, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+    Mana::Renderer2D::drawRotatedQuad({ -2.0f, 0.0f, 0.0f }, { 1.0f, 1.0f }, rotation, m_checkerBoard, 10.0f, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
     
-    
-    for (float y = -5.0f; y < 5.0f; y += 0.5f)
+    /*for (float y = -5.0f; y < 5.0f; y += 0.5f)
     {
         for (float x = -5.0f; x < 5.0f; x += 0.5f)
         {
             glm::vec3 color = { (x + 5.0f) / 10, 0.2f, (y + 5.0f) / 10 };
             Mana::Renderer2D::drawQuad({ x, y, -0.1}, { 0.45f, 0.45f }, glm::vec4(color, 0.5f));
         }
-    }
+    }*/
 
-    Mana::Renderer2D::drawQuad(glm::vec3(0.0f, 0.0f, 0.2f), { 1.0f, 1.0f }, m_spriteSheet, 1.0f, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+    //Mana::Renderer2D::drawQuad(glm::vec3(0.0f, 0.0f, 0.2f), { 1.0f, 1.0f }, m_spriteSheet, 1.0f, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
 
-    Mana::Renderer2D::drawQuad(glm::vec3(m_cubePosition, 0.1f), { 1.0f, 1.0f }, m_mario);
+    Mana::Renderer2D::drawQuad(glm::vec3(0.5f, 0.5f, 0.1f), { 1.0f, 1.0f }, m_textureStairs, 1.0f, {1.0f, 1.0f, 1.0f, 1.0f});
+    Mana::Renderer2D::drawQuad(glm::vec3(m_cubePosition, 0.2f), { 1.0f, 1.0f }, m_mario);
 
     Mana::Renderer2D::endScene();
 
-#if 0
+#if 1
     if (Mana::Input::isMouseButtonPressed(MA_MOUSE_BUTTON_LEFT))
     {
         auto [x, y] = Mana::Input::getMousPos();

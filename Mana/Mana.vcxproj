@@ -166,6 +166,7 @@
     <ClInclude Include="src\Mana\Render\Renderer2D.h" />
     <ClInclude Include="src\Mana\Render\RendererAPI.h" />
     <ClInclude Include="src\Mana\Render\Shader.h" />
+    <ClInclude Include="src\Mana\Render\SubTexture2D.h" />
     <ClInclude Include="src\Mana\Render\Texture.h" />
     <ClInclude Include="src\Mana\Render\VertexArray.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGLBuffer.h" />
@@ -602,6 +603,7 @@
     <ClCompile Include="src\Mana\Render\Renderer2D.cpp" />
     <ClCompile Include="src\Mana\Render\RendererAPI.cpp" />
     <ClCompile Include="src\Mana\Render\Shader.cpp" />
+    <ClCompile Include="src\Mana\Render\SubTexture2D.cpp" />
     <ClCompile Include="src\Mana\Render\Texture.cpp" />
     <ClCompile Include="src\Mana\Render\VertexArray.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGLBuffer.cpp" />

@@ -22,7 +22,12 @@ private:
     Mana::Ref<Mana::Shader> m_flatColorShader;
     Mana::Ref<Mana::Texture2D> m_checkerBoard;
     Mana::Ref<Mana::Texture2D> m_mario;
+
     Mana::Ref<Mana::Texture2D> m_spriteSheet;
+    Mana::Ref<Mana::Texture2D> m_marioSpriteSheet;
+
+    Mana::Ref<Mana::SubTexture2D> m_textureStairs;
+    Mana::Ref<Mana::SubTexture2D> m_smb;
 
     glm::vec2 m_cubePosition = { -1.0f, 1.0f };
 
