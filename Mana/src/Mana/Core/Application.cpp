@@ -15,12 +15,12 @@ namespace Mana {
 
     Application* Application::s_instance = nullptr;
 
-    Application::Application()
+    Application::Application(const std::string& name)
     {
         MA_CORE_ASSERT(!s_instance, "Appication already exists!");
         s_instance = this;
 
-        m_window = Scope<Window>(Window::Create());
+        m_window = Scope<Window>(Window::Create(WindowProps(name)));
         m_window->setEventCallback(MA_BIND_EVENT_FN(Application::onEvent));
         m_window->setVSync(true);
 
@@ -73,11 +73,12 @@ namespace Mana {
         //MA_CORE_TRACE("{0}", event);
         
 
-        for (auto it = m_layerStack.end(); it != m_layerStack.begin();)
+        for (auto it = m_layerStack.rbegin(); it != m_layerStack.rend(); ++it)
         {
-            (*--it)->onEvent(event);
             if (event.handled)
                 break;
+
+            (*it)->onEvent(event);
         }
     }
 
@@ -91,6 +92,11 @@ namespace Mana {
     {
         m_layerStack.pushOverlay(overlay);
         overlay->onAttach();
+    }
+
+    void Application::close()
+    {
+        m_running = false;
     }
 
     bool Application::onWindowClosed(WindowClosedEvent& event)

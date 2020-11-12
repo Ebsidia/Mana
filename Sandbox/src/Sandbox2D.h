@@ -20,6 +20,7 @@ private:
 
     Mana::Ref<Mana::VertexArray> m_squareVA;
     Mana::Ref<Mana::Shader> m_flatColorShader;
+    Mana::Ref<Mana::Framebuffer> m_framebuffer;
     Mana::Ref<Mana::Texture2D> m_checkerBoard;
     Mana::Ref<Mana::Texture2D> m_mario;
 

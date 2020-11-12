@@ -4,7 +4,7 @@
 
 namespace Mana
 {
-    class MANA_API WindowResizeEvent : public Event
+    class WindowResizeEvent : public Event
     {
     public:
         WindowResizeEvent(unsigned int width, unsigned int height)
@@ -26,7 +26,7 @@ namespace Mana
         unsigned int m_width, m_height;
     };
 
-    class MANA_API WindowClosedEvent : public Event
+    class WindowClosedEvent : public Event
     {
     public:
         WindowClosedEvent() {}
@@ -35,7 +35,7 @@ namespace Mana
         EVENT_CLASS_CATEGORY(EventCategoryApplication)
     };
 
-    class MANA_API AppTickEvent : public Event
+    class AppTickEvent : public Event
     {
     public:
         AppTickEvent() {}
@@ -44,7 +44,7 @@ namespace Mana
         EVENT_CLASS_CATEGORY(EventCategoryApplication)
     };
 
-    class MANA_API AppUpdateEvent : public Event
+    class AppUpdateEvent : public Event
     {
     public:
         AppUpdateEvent() {}
@@ -53,7 +53,7 @@ namespace Mana
         EVENT_CLASS_CATEGORY(EventCategoryApplication)
     };
 
-    class MANA_API AppRenderEvent : public Event
+    class AppRenderEvent : public Event
     {
     public:
         AppRenderEvent() {}

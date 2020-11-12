@@ -30,6 +30,11 @@ void Sandbox2D::onAttach()
     m_particle.VelocityVariation = { 3.0f, 1.0f };
     m_particle.Position = { 0.0f, 0.0f };
 
+    Mana::FramebufferSpecs frameSpec;
+    frameSpec.width = 1280.0f;
+    frameSpec.height = 720.0f;
+    m_framebuffer = Mana::Framebuffer::Create(frameSpec);
+
     m_cameraController.setZoomLevel(5.0f);
 }
 
@@ -86,8 +91,10 @@ void Sandbox2D::onUpdate(Mana::TimeStep dt)
 
     //Mana::Renderer2D::drawQuad(glm::vec3(0.0f, 0.0f, 0.2f), { 1.0f, 1.0f }, m_spriteSheet, 1.0f, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
 
-    Mana::Renderer2D::drawQuad(glm::vec3(0.5f, 0.5f, 0.1f), { 1.0f, 1.0f }, m_textureStairs, 1.0f, {1.0f, 1.0f, 1.0f, 1.0f});
+    Mana::Renderer2D::drawQuad(glm::vec3(0.5f, 0.5f, 0.1f), { 1.0f, 2.0f }, m_textureStairs, 1.0f, {1.0f, 1.0f, 1.0f, 1.0f});
     Mana::Renderer2D::drawQuad(glm::vec3(m_cubePosition, 0.2f), { 1.0f, 1.0f }, m_mario);
+
+    //Mana::Renderer2D::drawQuad(glm::vec3(0.0f, 0.0f, 0.0f), { 1.0f, 1.0f }, (void*)textureId, 1.0f, {1.0f, 1.0f, 1.0f, 1.0f});
 
     Mana::Renderer2D::endScene();
 

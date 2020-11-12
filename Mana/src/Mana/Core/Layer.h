@@ -7,7 +7,7 @@
 
 namespace Mana
 {
-    class MANA_API Layer
+    class  Layer
     {
     public:
         Layer(const std::string& name = "Layer");

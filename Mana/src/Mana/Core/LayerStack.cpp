@@ -12,7 +12,10 @@ namespace Mana
     LayerStack::~LayerStack()
     {
         for (Layer* layer : m_layers)
+        { 
+            layer->onDetach();
             delete layer;
+        }
     }
 
     void LayerStack::pushLayer(Layer* layer)
@@ -28,9 +31,10 @@ namespace Mana
 
     void LayerStack::popLayer(Layer* layer)
     {
-        auto it = std::find(m_layers.begin(), m_layers.end(), layer);
-        if (it != m_layers.end())
+        auto it = std::find(m_layers.begin(), m_layers.begin() + m_layerInsertIndex, layer);
+        if (it != m_layers.begin() + m_layerInsertIndex)
         {
+            layer->onDetach();
             m_layers.erase(it);
             m_layerInsertIndex--;
         }
@@ -38,9 +42,10 @@ namespace Mana
 
     void LayerStack::popOverlay(Layer* overlay)
     {
-        auto it = std::find(m_layers.begin(), m_layers.end(), overlay);
+        auto it = std::find(m_layers.begin() + m_layerInsertIndex, m_layers.end(), overlay);
         if (it != m_layers.end())
         {
+            overlay->onDetach();
             m_layers.erase(it);
         }
     }

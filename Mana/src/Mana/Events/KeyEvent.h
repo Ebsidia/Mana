@@ -4,7 +4,7 @@
 
 namespace Mana
 {
-    class MANA_API KeyEvent : public Event 
+    class KeyEvent : public Event 
     {
     public:
         inline int getKeyCode() const { return m_keyCode; }
@@ -17,7 +17,7 @@ namespace Mana
         int m_keyCode;
     };
     
-    class MANA_API KeyPressedEvent : public KeyEvent
+    class KeyPressedEvent : public KeyEvent
     {
     public:
         KeyPressedEvent(int keyCode, int repeatCount)
@@ -37,7 +37,7 @@ namespace Mana
         int m_repeatCount;
     };
 
-    class MANA_API KeyReleasedEvent : public KeyEvent 
+    class KeyReleasedEvent : public KeyEvent 
     {
     public: 
         KeyReleasedEvent(int keyCode)
@@ -54,7 +54,7 @@ namespace Mana
 
     };
 
-    class MANA_API KeyTypedEvent : public KeyEvent
+    class KeyTypedEvent : public KeyEvent
     {
     public:
         KeyTypedEvent(int keyCode)

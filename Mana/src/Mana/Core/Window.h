@@ -9,17 +9,17 @@ namespace Mana
     struct WindowProps
     {
         std::string Title;
-        unsigned int Width;
-        unsigned int Height;
+        uint32_t Width;
+        uint32_t Height;
 
         WindowProps(const std::string& title = "Mana Engine",
-            unsigned int width = 1280,
-            unsigned int height = 720)
+            uint32_t width = 1280,
+            uint32_t height = 720)
             : Title(title), Width(width), Height(height)
         {}
     };
 
-    class MANA_API Window
+    class  Window
     {
     public:
         using EventCallbackFn = std::function<void(Event&)>;
@@ -28,8 +28,8 @@ namespace Mana
 
         virtual void onUpdate() = 0;
 
-        virtual unsigned int getWidth() const = 0;
-        virtual unsigned int getHeight() const = 0;
+        virtual uint32_t getWidth() const = 0;
+        virtual uint32_t getHeight() const = 0;
 
         virtual void setEventCallback(const EventCallbackFn& callback) = 0;
         virtual void setVSync(bool enabled) = 0;

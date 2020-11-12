@@ -2,18 +2,26 @@
 
 #include <memory>
 
-#ifdef MA_PLATFORM_WINDOWS
-#if MA_DYNAMIC_LIB
-    #ifdef MA_BUILD_DLL
-        #define MANA_API __declspec(dllexport)
+#ifdef _WIN32
+    /* Windows x64/x86 */
+    #ifdef _WIN64
+        /* Windows x64  */
+        #define MA_PLATFORM_WINDOWS
     #else
-        #define MANA_API __declspec(dllimport)
+    /* Windows x86 */
+    #error "x86 Builds are not supported!"
     #endif
-#else
-    #define MANA_API
 #endif
+
+#ifdef MA_DEBUG
+    #if defined(MA_PLATFORM_WINDOWS)
+        #define MA_DEBUGBREAK() __debugbreak()
+    #else
+        #error "Platform doesn't support debugbreak yet!"
+    #endif
+    #define MA_ENABLE_ASSERTS
 #else
-    #error Mana only supports Windows!
+#   define HZ_DEBUGBREAK()
 #endif
 
 #ifdef MA_DEBUG

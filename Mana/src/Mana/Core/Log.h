@@ -15,7 +15,7 @@
 
 namespace Mana {
 
-    class MANA_API Log
+    class  Log
     {
     public:
         static void init();

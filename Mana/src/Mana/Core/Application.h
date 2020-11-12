@@ -20,15 +20,15 @@
 
 #include "Mana/ImGui/ImGuiLayer.h"
 
+int main(int argc, char** argv);
+
 namespace Mana {
 
-    class MANA_API Application
+    class  Application
     {
     public:
-        Application();
+        Application(const std::string& name = "Mana Engine");
         virtual ~Application();
-
-        void run();
 
         void onEvent(Event& event);
 
@@ -36,9 +36,16 @@ namespace Mana {
         void pushOverlay(Layer* overlay);
 
         inline Window& getWindow() { return *m_window; }
+
+        void close();
+
+        ImGuiLayer* getImGuiLayer() {return m_imguiLayer;}
+
         inline static Application& get() { return *s_instance; }
 
     private:
+        void run();
+
         bool onWindowClosed(WindowClosedEvent& event);
         bool onWindowResize(WindowResizeEvent& event);
         bool onKeyPressed(KeyPressedEvent& event);
@@ -54,6 +61,7 @@ namespace Mana {
         float m_lastFrameTime = 0.0f;
     private:
         static Application* s_instance;
+        friend int ::main(int argc, char** argv);
     };
 
     //To be defined in Client Application

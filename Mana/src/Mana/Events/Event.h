@@ -30,10 +30,11 @@ namespace Mana
 
 #define EVENT_CLASS_CATEGORY(category) virtual int getCategoryFlags() const override { return category; }
 
-    class MANA_API Event
+    class Event
     {
         friend class EventDispatcher;
     public:
+        virtual ~Event() = default;
         bool handled = false;
 
         virtual EventType getEventType() const = 0;

@@ -7,7 +7,7 @@
 #include "Mana/Events/MouseEvent.h"
 
 namespace Mana {
-    class MANA_API ImGuiLayer : public Layer
+    class ImGuiLayer : public Layer
     {
     public:
         ImGuiLayer();
@@ -16,9 +16,16 @@ namespace Mana {
         virtual void onAttach() override;
         virtual void onDetach() override;
 
+        virtual void onEvent(Event& event) override;
+
         void begin();
         void end();
+
+        void SetThemeColors();
+
+        void setBlockEvents(bool block) { m_blockEvents = block; }
     private:
+        bool m_blockEvents = true;
         float m_time = 0.0f;
 
     };

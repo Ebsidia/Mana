@@ -1,14 +1,12 @@
 #include "mapch.h"
-#include "Platform/Windows/WindowsInput.h"
+#include "Mana/Core/Input.h"
 #include "Mana/Core/Application.h"
 
 #include <GLFW/glfw3.h>
 
 namespace Mana {
 
-    Input* Input::s_instance = new WindowsInput();
-
-    bool WindowsInput::isKeyPressedImpl(int keycode)
+    bool Input::isKeyPressed(int keycode)
     {
         auto window = static_cast<GLFWwindow*>(Application::get().getWindow().getNativeWindow());
         auto state = glfwGetKey(window, keycode);
@@ -16,7 +14,7 @@ namespace Mana {
         return state == GLFW_PRESS || state == GLFW_REPEAT;
     }
 
-    bool WindowsInput::isMouseButtonPressedImpl(int button)
+    bool Input::isMouseButtonPressed(int button)
     {
         auto window = static_cast<GLFWwindow*>(Application::get().getWindow().getNativeWindow());
         auto state = glfwGetMouseButton(window, button);
@@ -24,7 +22,7 @@ namespace Mana {
         return state == GLFW_PRESS;
     }
 
-    std::pair<float, float> WindowsInput::getMousePosImpl()
+    std::pair<float, float> Input::getMousePos()
     {
         auto window = static_cast<GLFWwindow*>(Application::get().getWindow().getNativeWindow());
         double xPos, yPos;
@@ -34,16 +32,16 @@ namespace Mana {
         return { (float)xPos, (float)yPos };
     }
 
-    float WindowsInput::getMouseXImpl()
+    float Input::getMouseX()
     {
-        auto[x, y] = getMousePosImpl();
+        auto[x, y] = getMousePos();
 
         return x;
     }
 
-    float WindowsInput::getMouseYImpl()
+    float Input::getMouseY()
     {
-        auto [x, y] = getMousePosImpl();
+        auto [x, y] = getMousePos();
 
         return y;
     }

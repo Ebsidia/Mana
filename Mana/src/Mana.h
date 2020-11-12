@@ -29,6 +29,7 @@
 #include "Mana/Render/RenderCommand.h"
 
 #include "Mana/Render/Buffer.h"
+#include "Mana/Render/Framebuffer.h"
 #include "Mana/Render/Shader.h"
 #include "Mana/Render/Texture.h"
 #include "Mana/Render/SubTexture2D.h"

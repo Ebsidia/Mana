@@ -4,7 +4,7 @@
 
 namespace Mana
 {
-    class MANA_API MouseMovedEvent : public Event 
+    class  MouseMovedEvent : public Event 
     {
     public:
         MouseMovedEvent(float x, float y)
@@ -27,7 +27,7 @@ namespace Mana
         float m_mouseX, m_mouseY;
     };
 
-    class MANA_API MouseScrolledEvent : public Event 
+    class  MouseScrolledEvent : public Event 
     {
     public:
         MouseScrolledEvent(float xOffset, float yOffset)
@@ -49,7 +49,7 @@ namespace Mana
         float m_xOffset, m_yOffset;
     };
 
-    class MANA_API MouseButtonEvent : public Event 
+    class  MouseButtonEvent : public Event 
     {
     public:
         inline int getMouseButton() const { return m_button; }
@@ -63,7 +63,7 @@ namespace Mana
         int m_button;
     };
 
-    class MANA_API MouseButtonPressedEvent : public MouseButtonEvent
+    class  MouseButtonPressedEvent : public MouseButtonEvent
     {
     public:
         MouseButtonPressedEvent(int button)
@@ -79,7 +79,7 @@ namespace Mana
         EVENT_CLASS_TYPE(MouseButtonPressed)
     };
 
-    class MANA_API MouseButtonReleasedEvent : public MouseButtonEvent
+    class  MouseButtonReleasedEvent : public MouseButtonEvent
     {
     public:
         MouseButtonReleasedEvent(int button)

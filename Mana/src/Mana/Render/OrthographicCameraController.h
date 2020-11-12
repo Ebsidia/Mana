@@ -32,9 +32,10 @@ namespace Mana {
         float getZoomLevel() const { return m_zoomLevel; }
         void setZoomLevel(float level) { m_zoomLevel = level; calculateView(); }
 
+        void calculateView();
         const OrthographicCameraBounds& getBounds() const { return m_bounds; }
     private:
-        void calculateView();
+        
 
         bool onMouseScrolled(MouseScrolledEvent& event);
         bool onWindowResized(WindowResizeEvent& event);
