@@ -31,6 +31,7 @@ IncludeDir["GLAD"] = "%{wks.location}/Mana/vendor/GLAD/include"
 IncludeDir["ImGui"] = "%{wks.location}/Mana/vendor/imgui"
 IncludeDir["glm"] = "%{wks.location}/Mana/vendor/glm"
 IncludeDir["stb_image"] = "%{wks.location}/Mana/vendor/stb_image"
+IncludeDir["entt"] = "%{wks.location}/Mana/vendor/entt/include"
 
 group "Dependencies"
     include "vendor/premake"

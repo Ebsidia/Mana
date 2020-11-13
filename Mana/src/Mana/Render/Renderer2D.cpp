@@ -111,6 +111,19 @@ namespace Mana {
     {
     }
 
+    void Renderer2D::beginScene(const Camera& camera, const glm::mat4& transform)
+    {
+        glm::mat4 viewProjection = camera.getProjection() * glm::inverse(transform);
+
+        s_renderData.textureShader->bind();
+        s_renderData.textureShader->setMat4("u_viewProjection", viewProjection);
+
+        s_renderData.quadIndexCount = 0;
+        s_renderData.quadVertexBufferPtr = s_renderData.quadVertexBufferBase;
+
+        s_renderData.textureSlotIndex = 1;
+    }
+
     void Renderer2D::beginScene(const OrthographicCamera& camera)
     {
         s_renderData.textureShader->bind();
@@ -159,34 +172,10 @@ namespace Mana {
 
     void Renderer2D::drawQuad(const glm::vec3& position, const glm::vec2& size, glm::vec4& color)
     {
-        constexpr size_t quadVertexCount = 4;
-        const float textureIndex = 0.0f; // White Texture
-        constexpr glm::vec2 textureCoords[] = { { 0.0f, 0.0f }, { 1.0f, 0.0f }, { 1.0f, 1.0f }, { 0.0f, 1.0f } };
-
-        if (s_renderData.quadIndexCount >= renderer2DData::maxIndices)
-            startNewBatch();
-        
-
-        //white texture
-        const float texIndex = 0;
-        const float tilingFactor = 1;
-
         glm::mat4 transform = glm::translate(glm::mat4(1.0f), position)
             * glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
 
-        for (size_t i = 0; i < quadVertexCount; i++)
-        {
-            s_renderData.quadVertexBufferPtr->position = transform * s_renderData.quadVertexPositions[i];
-            s_renderData.quadVertexBufferPtr->color = color;
-            s_renderData.quadVertexBufferPtr->texCoord = textureCoords[i];
-            s_renderData.quadVertexBufferPtr->texIndex = textureIndex;
-            s_renderData.quadVertexBufferPtr->tilingFactor = tilingFactor;
-            s_renderData.quadVertexBufferPtr++;
-        }
-
-        s_renderData.quadIndexCount += 6;
-
-        s_renderData.stats.quadCount++;
+        drawQuad(transform, color);
     }
 
     void Renderer2D::drawQuad(const glm::vec2& position, const glm::vec2& size, Ref<Texture2D>& texture, float tilingFactor, const glm::vec4& tintColor)
@@ -196,9 +185,25 @@ namespace Mana {
 
     void Renderer2D::drawQuad(const glm::vec3& position, const glm::vec2& size, Ref<Texture2D>& texture, float tilingFactor, const glm::vec4& tintColor)
     {
+        glm::mat4 transform = glm::translate(glm::mat4(1.0f), position)
+            * glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
+
+        drawQuad(transform, texture, tilingFactor, tintColor);
+    }
+
+    /////////////////Draw Quads Using SubTextures////////////////////////////////////////////////
+
+    void Renderer2D::drawQuad(const glm::vec2& position, const glm::vec2& size, Ref<SubTexture2D>& subtexture, float tilingFactor, const glm::vec4& tintColor)
+    {
+        drawQuad({ position.x, position.y, 0.0f }, size, subtexture, tilingFactor, tintColor);
+    }
+
+    void Renderer2D::drawQuad(const glm::vec3& position, const glm::vec2& size, Ref<SubTexture2D>& subtexture, float tilingFactor, const glm::vec4& tintColor)
+    {
         constexpr size_t quadVertexCount = 4;
         constexpr glm::vec4 color = { 1.0f, 1.0f, 1.0f, 1.0f };
-        constexpr glm::vec2 textureCoords[] = { { 0.0f, 0.0f }, { 1.0f, 0.0f }, { 1.0f, 1.0f }, { 0.0f, 1.0f } };
+        const glm::vec2* textureCoords = subtexture->getTextureCoords();
+        const Ref<Texture2D> texture = subtexture->getTexture();
 
         if (s_renderData.quadIndexCount >= renderer2DData::maxIndices)
             startNewBatch();
@@ -238,19 +243,42 @@ namespace Mana {
         s_renderData.stats.quadCount++;
     }
 
-    /////////////////Draw Quads Using SubTextures////////////////////////////////////////////////
+    ////////////Draw Quads using a Transform///////////////////////////////////////////////////////
 
-    void Renderer2D::drawQuad(const glm::vec2& position, const glm::vec2& size, Ref<SubTexture2D>& subtexture, float tilingFactor, const glm::vec4& tintColor)
+    void Renderer2D::drawQuad(const glm::mat4& transform, glm::vec4& color)
     {
-        drawQuad({ position.x, position.y, 0.0f }, size, subtexture, tilingFactor, tintColor);
+        constexpr size_t quadVertexCount = 4;
+        const float textureIndex = 0.0f; // White Texture
+        constexpr glm::vec2 textureCoords[] = { { 0.0f, 0.0f }, { 1.0f, 0.0f }, { 1.0f, 1.0f }, { 0.0f, 1.0f } };
+
+        if (s_renderData.quadIndexCount >= renderer2DData::maxIndices)
+            startNewBatch();
+
+
+        //white texture
+        const float texIndex = 0;
+        const float tilingFactor = 1;
+
+        for (size_t i = 0; i < quadVertexCount; i++)
+        {
+            s_renderData.quadVertexBufferPtr->position = transform * s_renderData.quadVertexPositions[i];
+            s_renderData.quadVertexBufferPtr->color = color;
+            s_renderData.quadVertexBufferPtr->texCoord = textureCoords[i];
+            s_renderData.quadVertexBufferPtr->texIndex = textureIndex;
+            s_renderData.quadVertexBufferPtr->tilingFactor = tilingFactor;
+            s_renderData.quadVertexBufferPtr++;
+        }
+
+        s_renderData.quadIndexCount += 6;
+
+        s_renderData.stats.quadCount++;
     }
 
-    void Renderer2D::drawQuad(const glm::vec3& position, const glm::vec2& size, Ref<SubTexture2D>& subtexture, float tilingFactor, const glm::vec4& tintColor)
+    void Renderer2D::drawQuad(const glm::mat4& transform, Ref<Texture2D>& texture, float tilingFactor, const glm::vec4& tintColor)
     {
         constexpr size_t quadVertexCount = 4;
         constexpr glm::vec4 color = { 1.0f, 1.0f, 1.0f, 1.0f };
-        const glm::vec2* textureCoords = subtexture->getTextureCoords();
-        const Ref<Texture2D> texture = subtexture->getTexture();
+        constexpr glm::vec2 textureCoords[] = { { 0.0f, 0.0f }, { 1.0f, 0.0f }, { 1.0f, 1.0f }, { 0.0f, 1.0f } };
 
         if (s_renderData.quadIndexCount >= renderer2DData::maxIndices)
             startNewBatch();
@@ -271,9 +299,6 @@ namespace Mana {
             s_renderData.textureSlots[s_renderData.textureSlotIndex] = texture;
             s_renderData.textureSlotIndex++;
         }
-
-        glm::mat4 transform = glm::translate(glm::mat4(1.0f), position)
-            * glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
 
         for (size_t i = 0; i < quadVertexCount; i++)
         {

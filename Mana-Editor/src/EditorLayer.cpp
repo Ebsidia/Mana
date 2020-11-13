@@ -15,27 +15,28 @@ namespace Mana {
 
     void EditorLayer::onAttach()
     {
-        m_checkerBoard = Texture2D::Create("assets/textures/Checkerboard.png");
+        //m_checkerBoard = Texture2D::Create("assets/textures/Checkerboard.png");
 
         FramebufferSpecs frameSpec;
         frameSpec.width = 1280.0f;
         frameSpec.height = 720.0f;
         m_framebuffer = Framebuffer::Create(frameSpec);
 
-#if 0
-        m_checkerBoard = Texture2D::Create("assets/textures/Checkerboard.png");
-        m_mario = Texture2D::Create("assets/textures/mario.png");
-        m_spriteSheet = Texture2D::Create("assets/game/Spritesheet/RPGpack_sheet_2X.png");
-        m_marioSpriteSheet = Texture2D::Create("assets/textures/mario_characters.png");
+        m_activeScene = CreateRef<Scene>();
 
-        m_textureStairs = SubTexture2D::createFromCoords(m_spriteSheet, { 4, 1 }, { 128, 128 }, { 1, 2 });
-        m_smb = SubTexture2D::createFromCoords(m_marioSpriteSheet, { 1, 8 }, { 8, 16 }, { 1, 1 });
+        auto square = m_activeScene->createEntity("Square");
+        square.addComponent<SpriteRendererComponent>(m_Color);
+
+        m_squareEntity = square;
+
+        m_cameraEntity = m_activeScene->createEntity("Camera Entity");
+        m_cameraEntity.addComponent<CameraComponent>();
+
+        m_SecondCamera = m_activeScene->createEntity("Camera Entity");
+        auto& cc = m_SecondCamera.addComponent<CameraComponent>();
+        cc.Primary = false;
 
 
-
-        m_cameraController.setZoomLevel(5.0f);
-
-#endif
     }
 
     void EditorLayer::onDetach()
@@ -45,21 +46,29 @@ namespace Mana {
 
     void EditorLayer::onUpdate(TimeStep dt)
     {
+        //MA_CORE_INFO("Viewport X: {0}, Y: {1}", m_viewportSize.x, m_viewportSize.y);
+        
+        if (FramebufferSpecs spec = m_framebuffer->getSpecification();
+            m_viewportSize.x > 0.0f && m_viewportSize.y > 0.0f &&
+            (spec.width != m_viewportSize.x || spec.height != m_viewportSize.y))
+        {
+            m_framebuffer->resize((uint32_t)m_viewportSize.x, (uint32_t)m_viewportSize.y);
+            m_cameraController.onResize(m_viewportSize.x, m_viewportSize.y);
+
+            m_activeScene->onViewportResize((uint32_t)m_viewportSize.x, (uint32_t)m_viewportSize.y);
+        }
+
         if(m_viewportFocused)
             m_cameraController.onUpdate(dt);
 
         Renderer2D::resetStats();
-        {
-            m_framebuffer->bind();
-            RenderCommand::setClearColor({ 0.15f, 0.15f, 0.15f, 1 });
-            RenderCommand::clear();
-        }
+        m_framebuffer->bind();
+        RenderCommand::setClearColor({ 0.15f, 0.15f, 0.15f, 1 });
+        RenderCommand::clear();
         
-        Renderer2D::beginScene(m_cameraController.getCamera());
 
-        Mana::Renderer2D::drawQuad(glm::vec3(0.0f, 0.0f, -0.2f), { 20.0f, 20.0f }, m_checkerBoard, 10.0f, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
-
-        Renderer2D::endScene();
+        //update the scene
+        m_activeScene->onUpdate(dt);
 
         m_framebuffer->unbind();
 
@@ -142,6 +151,32 @@ namespace Mana {
         ImGui::Text("Vertices: %d", stats.getTotalVertexCount());
         ImGui::Text("Indices: %d", stats.getTotalIndexCount());
 
+        if(m_squareEntity)
+        {
+            ImGui::Separator();
+            auto& tag = m_squareEntity.getComponent<TagComponent>().Tag;
+            ImGui::Text("%s", tag.c_str());
+
+            auto& squareColor = m_squareEntity.getComponent<SpriteRendererComponent>().Color;
+            ImGui::ColorEdit4("Square Color", glm::value_ptr(squareColor));
+        }
+
+        ImGui::DragFloat3("Camera Transform", 
+            glm::value_ptr(m_cameraEntity.getComponent<TransformComponent>().getTransform()[3]));
+
+        if(ImGui::Checkbox("Camera A", &m_primaryCamera))
+        {
+            m_cameraEntity.getComponent<CameraComponent>().Primary = m_primaryCamera;
+            m_SecondCamera.getComponent<CameraComponent>().Primary = !m_primaryCamera;
+        }
+
+        
+        auto& camera = m_SecondCamera.getComponent<CameraComponent>().Camera;
+        float orthosize = camera.getOrthographicSize();
+
+        if (ImGui::DragFloat("Second Camera Ortho size", &orthosize))
+            camera.setOrthographicSize(orthosize);
+       
         ImGui::End();
 
         ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
@@ -149,18 +184,10 @@ namespace Mana {
 
         m_viewportFocused = ImGui::IsWindowFocused();
         m_viewportHovered = ImGui::IsWindowHovered();
-
         Application::get().getImGuiLayer()->setBlockEvents(!m_viewportFocused || !m_viewportHovered);
 
         ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
-        if (m_viewportSize != *((glm::vec2*) & viewportPanelSize) && viewportPanelSize.x > 0 && viewportPanelSize.y > 0)
-        {
-            m_framebuffer->resize((uint32_t)viewportPanelSize.x, (uint32_t)viewportPanelSize.y);
-            m_viewportSize = { viewportPanelSize.x, viewportPanelSize.y };
-
-            m_cameraController.calculateView();
-
-        }
+        m_viewportSize = { viewportPanelSize.x, viewportPanelSize.y };
         
         uint64_t textureID = m_framebuffer->getColorAttachmentRendererId();
         ImGui::Image((void*)textureID, ImVec2{ m_viewportSize.x, m_viewportSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });

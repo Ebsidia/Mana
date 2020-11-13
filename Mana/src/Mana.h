@@ -23,6 +23,11 @@
 
 #include "Mana/ImGui/ImGuiLayer.h"
 
+//----------------Scene---------------
+#include "Mana/Scene/Scene.h"
+#include "Mana/Scene/Entity.h"
+#include "Mana/Scene/Components.h"
+
 //----------------Render--------------
 #include "Mana/Render/Renderer.h"
 #include "Mana/Render/Renderer2D.h"

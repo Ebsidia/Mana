@@ -7,15 +7,7 @@
 namespace Mana {
 
     OrthographicCameraController::OrthographicCameraController(float aspectRatio, bool rotation)
-        : m_aspectRatio(aspectRatio), m_zoomLevel(1.0f), m_bounds({ -m_aspectRatio * m_zoomLevel, m_aspectRatio * m_zoomLevel, -m_zoomLevel, m_zoomLevel }),
-          m_camera(m_bounds.Left, m_bounds.Right, m_bounds.Bottom, m_bounds.Top), m_rotation(rotation)
-    {
-
-    }
-
-    OrthographicCameraController::OrthographicCameraController(float aspectRatio, float zoomLevel, bool rotation)
-        : m_aspectRatio(aspectRatio), m_zoomLevel(zoomLevel), m_bounds({ -m_aspectRatio * m_zoomLevel, m_aspectRatio * m_zoomLevel, -m_zoomLevel, m_zoomLevel }),
-          m_camera(m_bounds.Left, m_bounds.Right, m_bounds.Bottom, m_bounds.Top), m_rotation(rotation)
+        : m_aspectRatio(aspectRatio), m_camera(-m_aspectRatio * m_zoomLevel, m_aspectRatio* m_zoomLevel, -m_zoomLevel, m_zoomLevel), m_rotation(rotation)
     {
 
     }
@@ -74,26 +66,24 @@ namespace Mana {
         dispatcher.Dispatch<WindowResizeEvent>(MA_BIND_EVENT_FN(OrthographicCameraController::onWindowResized));
     }
 
-    void OrthographicCameraController::calculateView()
+    void OrthographicCameraController::onResize(float width, float height)
     {
-        m_bounds = { -m_aspectRatio * m_zoomLevel, m_aspectRatio * m_zoomLevel, -m_zoomLevel, m_zoomLevel };
-        m_camera.setProjection(m_bounds.Left, m_bounds.Right, m_bounds.Bottom, m_bounds.Top);
+        m_aspectRatio = width / height;
+        m_camera.setProjection(-m_aspectRatio * m_zoomLevel, m_aspectRatio * m_zoomLevel, -m_zoomLevel, m_zoomLevel);
     }
 
     bool OrthographicCameraController::onMouseScrolled(MouseScrolledEvent& event)
     {
         m_zoomLevel -= event.getYOffset() * 0.25f;
         m_zoomLevel = std::max(m_zoomLevel, 0.25f);
-
-        calculateView();
+        m_camera.setProjection(-m_aspectRatio * m_zoomLevel, m_aspectRatio * m_zoomLevel, -m_zoomLevel, m_zoomLevel);
 
         return false;
     }
 
     bool OrthographicCameraController::onWindowResized(WindowResizeEvent& event)
     {
-        m_aspectRatio = (float)event.getWidth() / (float)event.getHeight();
-        calculateView();
+        onResize((float)event.getWidth(), (float)event.getHeight());
         return false;
     }
 

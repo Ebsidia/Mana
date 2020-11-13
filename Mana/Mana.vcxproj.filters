@@ -1398,6 +1398,11 @@
     <ClInclude Include="vendor\stb_image\stb_image.h">
       <Filter>vendor\stb_image</Filter>
     </ClInclude>
+    <ClInclude Include="src\Mana\Scene\Scene.h" />
+    <ClInclude Include="src\Mana\Scene\Components.h" />
+    <ClInclude Include="src\Mana\Scene\Entity.h" />
+    <ClInclude Include="src\Mana\Render\Camera.h" />
+    <ClInclude Include="src\Mana\Scene\SceneCamera.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Mana\Core\Application.cpp">
@@ -1487,5 +1492,8 @@
     <ClCompile Include="vendor\stb_image\stb_image.cpp">
       <Filter>vendor\stb_image</Filter>
     </ClCompile>
+    <ClCompile Include="src\Mana\Scene\Scene.cpp" />
+    <ClCompile Include="src\Mana\Scene\Entity.cpp" />
+    <ClCompile Include="src\Mana\Scene\SceneCamera.cpp" />
   </ItemGroup>
 </Project>

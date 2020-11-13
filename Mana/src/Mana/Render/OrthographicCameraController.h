@@ -8,20 +8,10 @@
 
 namespace Mana {
 
-    struct OrthographicCameraBounds
-    {
-        float Left, Right;
-        float Bottom, Top;
-
-        float GetWidth() { return Right - Left; }
-        float GetHeight() { return Top - Bottom; }
-    };
-
     class OrthographicCameraController
     {
     public:
         OrthographicCameraController(float aspectRatio, bool rotation = false);
-        OrthographicCameraController(float aspectRatio, float zoomLevel, bool rotation = false);
 
         void onUpdate(TimeStep dt);
         void onEvent(Event& event);
@@ -30,20 +20,17 @@ namespace Mana {
         const OrthographicCamera& getCamera() const { return m_camera; }
 
         float getZoomLevel() const { return m_zoomLevel; }
-        void setZoomLevel(float level) { m_zoomLevel = level; calculateView(); }
+        void setZoomLevel(float level) { m_zoomLevel = level; }
 
-        void calculateView();
-        const OrthographicCameraBounds& getBounds() const { return m_bounds; }
+        void onResize(float width, float height);
+
     private:
-        
-
         bool onMouseScrolled(MouseScrolledEvent& event);
         bool onWindowResized(WindowResizeEvent& event);
 
     private:
         float m_aspectRatio;
-        float m_zoomLevel;
-        OrthographicCameraBounds m_bounds;
+        float m_zoomLevel = 1.0f;
         OrthographicCamera m_camera;
 
         bool m_rotation;

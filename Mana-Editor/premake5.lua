@@ -18,7 +18,8 @@ project "Mana-Editor"
         "%{wks.location}/Mana/vendor/spdlog/include",
         "%{wks.location}/Mana/src",
         "%{wks.location}/Mana/vendor",
-        "%{IncludeDir.glm}"
+        "%{IncludeDir.glm}",
+        "%{IncludeDir.entt}"
     }
 
     links

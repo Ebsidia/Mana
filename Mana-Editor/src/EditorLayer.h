@@ -20,12 +20,20 @@ namespace Mana {
         Ref<VertexArray> m_squareVA;
         Ref<Shader> m_flatColorShader;
         Ref<Framebuffer> m_framebuffer;
+
+        Ref<Scene> m_activeScene;
+        Entity m_squareEntity;
+        Entity m_cameraEntity;
+        Entity m_SecondCamera;
+
+        bool m_primaryCamera = true;
+
         Ref<Texture2D> m_checkerBoard;
 
-        glm::vec2 m_viewportSize;
+        glm::vec2 m_viewportSize{0.0f, 0.0f};
         bool m_viewportFocused = false;
         bool m_viewportHovered = false;
 
-        glm::vec4 m_Color = { 1.0f, 1.0f, 1.0f, 1.0f };
+        glm::vec4 m_Color = { 0.33f, 0.0f, 0.90f, 1.0f };
     };
 }
