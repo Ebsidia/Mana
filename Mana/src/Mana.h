@@ -26,6 +26,7 @@
 //----------------Scene---------------
 #include "Mana/Scene/Scene.h"
 #include "Mana/Scene/Entity.h"
+#include "Mana/Scene/ScriptableEntity.h"
 #include "Mana/Scene/Components.h"
 
 //----------------Render--------------

@@ -1,5 +1,6 @@
 #pragma once
 #include "Mana.h"
+#include "Panels/SceneHierarchyPanel.h"
 
 namespace Mana {
     class EditorLayer : public Mana::Layer
@@ -23,6 +24,7 @@ namespace Mana {
 
         Ref<Scene> m_activeScene;
         Entity m_squareEntity;
+        Entity m_blueSquare;
         Entity m_cameraEntity;
         Entity m_SecondCamera;
 
@@ -35,5 +37,7 @@ namespace Mana {
         bool m_viewportHovered = false;
 
         glm::vec4 m_Color = { 0.33f, 0.0f, 0.90f, 1.0f };
+
+        SceneHierarchyPanel m_hierarchyPanel;
     };
 }

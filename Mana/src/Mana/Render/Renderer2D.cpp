@@ -45,8 +45,6 @@ namespace Mana {
 
     static renderer2DData s_renderData;
 
-    
-
     void Renderer2D::init()
     {
         s_renderData.vertexArray = VertexArray::Create();
@@ -88,7 +86,7 @@ namespace Mana {
 
         s_renderData.whiteTexture = Texture2D::Create(1, 1);
         uint32_t whiteTextureData = 0xffffffff;
-        s_renderData.whiteTexture->setData(&whiteTextureData, sizeof(whiteTextureData));
+        s_renderData.whiteTexture->setData(&whiteTextureData, sizeof(uint32_t));
 
         int32_t samplers[s_renderData.maxTextureSlots];
         for (uint32_t i = 0; i < s_renderData.maxTextureSlots; i++)
@@ -102,13 +100,14 @@ namespace Mana {
         s_renderData.textureSlots[0] = s_renderData.whiteTexture;
 
         s_renderData.quadVertexPositions[0] = { -0.5f, -0.5f, 0.0f, 1.0f };
-        s_renderData.quadVertexPositions[1] = { 0.5f, -0.5f, 0.0f, 1.0f };
-        s_renderData.quadVertexPositions[2] = { 0.5f,  0.5f, 0.0f, 1.0f };
+        s_renderData.quadVertexPositions[1] = {  0.5f, -0.5f, 0.0f, 1.0f };
+        s_renderData.quadVertexPositions[2] = {  0.5f,  0.5f, 0.0f, 1.0f };
         s_renderData.quadVertexPositions[3] = { -0.5f,  0.5f, 0.0f, 1.0f };
     }
 
     void Renderer2D::shutdown()
     {
+        delete[] s_renderData.quadVertexBufferBase;
     }
 
     void Renderer2D::beginScene(const Camera& camera, const glm::mat4& transform)
@@ -118,10 +117,7 @@ namespace Mana {
         s_renderData.textureShader->bind();
         s_renderData.textureShader->setMat4("u_viewProjection", viewProjection);
 
-        s_renderData.quadIndexCount = 0;
-        s_renderData.quadVertexBufferPtr = s_renderData.quadVertexBufferBase;
-
-        s_renderData.textureSlotIndex = 1;
+        startNewBatch();
     }
 
     void Renderer2D::beginScene(const OrthographicCamera& camera)
@@ -129,22 +125,22 @@ namespace Mana {
         s_renderData.textureShader->bind();
         s_renderData.textureShader->setMat4("u_viewProjection", camera.getViewProjectionMatrix());
 
-        s_renderData.quadIndexCount = 0;
-        s_renderData.quadVertexBufferPtr = s_renderData.quadVertexBufferBase;
-
-        s_renderData.textureSlotIndex = 1;
+        startNewBatch();
     }
 
     void Renderer2D::endScene()
     {
-        uint32_t dataSize = (uint8_t*)s_renderData.quadVertexBufferPtr - (uint8_t*)s_renderData.quadVertexBufferBase;
-        s_renderData.vertexBuffer->setData(s_renderData.quadVertexBufferBase, dataSize);
-
         flush();
     }
 
     void Renderer2D::flush()
     {
+        if (s_renderData.quadIndexCount == 0)
+            return;
+
+        uint32_t dataSize = (uint8_t*)s_renderData.quadVertexBufferPtr - (uint8_t*)s_renderData.quadVertexBufferBase;
+        s_renderData.vertexBuffer->setData(s_renderData.quadVertexBufferBase, dataSize);
+
         for (uint32_t i = 0; i < s_renderData.textureSlotIndex; i++)
             s_renderData.textureSlots[i]->bind(i);
 
@@ -155,12 +151,17 @@ namespace Mana {
 
     void Renderer2D::startNewBatch()
     {
-        endScene();
 
         s_renderData.quadIndexCount = 0;
         s_renderData.quadVertexBufferPtr = s_renderData.quadVertexBufferBase;
 
         s_renderData.textureSlotIndex = 1;
+    }
+
+    void Renderer2D::nextBatch()
+    {
+        flush();
+        startNewBatch();
     }
 
     /////////////////Draw Quads////////////////////////////////////////////////

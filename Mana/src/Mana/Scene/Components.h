@@ -2,8 +2,10 @@
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+
 #include "Mana//Render/Texture.h"
 #include "SceneCamera.h"
+#include "ScriptableEntity.h"
 
 namespace Mana {
 
@@ -20,8 +22,8 @@ namespace Mana {
     struct TransformComponent
     {
         glm::vec3 Translation = { 0.0f, 0.0f, 0.0f };
-        glm::vec3 Rotation = { 0.0f, 0.0f, 0.0f };
-        glm::vec3 Scale = { 1.0f, 1.0f, 1.0f };
+        glm::vec3 Rotation =    { 0.0f, 0.0f, 0.0f };
+        glm::vec3 Scale =       { 1.0f, 1.0f, 1.0f };
 
         TransformComponent() = default;
         TransformComponent(const TransformComponent&) = default;
@@ -61,5 +63,19 @@ namespace Mana {
         CameraComponent(const CameraComponent&) = default;
     };
 
+    struct NativeScriptComponent
+    {
+        ScriptableEntity* Instance = nullptr;
+
+        ScriptableEntity* (*InstantiateScript)();
+        void (*DestroyScript)(NativeScriptComponent*);
+
+        template<typename T>
+        void bind()
+        {
+            InstantiateScript = []() { return static_cast<ScriptableEntity*>(new T()); };
+            DestroyScript = [](NativeScriptComponent* nsc) { delete nsc->Instance; nsc->Instance = nullptr; };
+        }
+    };
     
 }

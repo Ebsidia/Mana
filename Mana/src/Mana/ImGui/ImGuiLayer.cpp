@@ -37,6 +37,9 @@ namespace Mana {
         //io.ConfigFlags |= imguiconfigflags_ViewportsNoTaskBarIcons;
         //io.ConfigFlags |= imguiconfigflags_ViewportsNoMerge;
         
+        io.Fonts->AddFontFromFileTTF("assets/fonts/OpenSans/OpenSans-Bold.ttf", 18);
+        io.FontDefault = io.Fonts->AddFontFromFileTTF("assets/fonts/OpenSans/OpenSans-Regular.ttf", 18);
+
         //ImGui::StyleColorsDark();
         ImGui::StyleColorsClassic();
 

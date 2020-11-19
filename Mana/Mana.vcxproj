@@ -179,6 +179,7 @@
     <ClInclude Include="src\Mana\Scene\Entity.h" />
     <ClInclude Include="src\Mana\Scene\Scene.h" />
     <ClInclude Include="src\Mana\Scene\SceneCamera.h" />
+    <ClInclude Include="src\Mana\Scene\ScriptableEntity.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGLBuffer.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGLContext.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGLFramebuffer.h" />

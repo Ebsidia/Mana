@@ -53,5 +53,6 @@ namespace Mana {
 
     private:
         static void startNewBatch();
+        static void nextBatch();
     };
 }

@@ -1403,6 +1403,7 @@
     <ClInclude Include="src\Mana\Scene\Entity.h" />
     <ClInclude Include="src\Mana\Render\Camera.h" />
     <ClInclude Include="src\Mana\Scene\SceneCamera.h" />
+    <ClInclude Include="src\Mana\Scene\ScriptableEntity.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Mana\Core\Application.cpp">

@@ -11,26 +11,6 @@ namespace Mana {
 
     Scene::Scene()
     {
-#if 0
-        struct TransformComponent
-        {
-            
-
-        };
-
-        entt::entity entity = m_regisrty.create();
-
-        m_regisrty.emplace<TransformComponent>(entity, glm::mat4(1.0f));
-
-        if(m_regisrty.has<TransformComponent>(entity))
-            TransformComponent& tranform = m_regisrty.get<TransformComponent>(entity);
-
-        auto view = m_regisrty.view<TransformComponent>();
-        for (auto entity : view)
-        {
-            TransformComponent& transform = m_regisrty.get<TransformComponent>(entity);
-        }
-#endif
     }
 
     Scene::~Scene()
@@ -48,8 +28,29 @@ namespace Mana {
         return entity;
     }
 
+    void Scene::destroyEntity(Entity entity)
+    {
+        m_registry.destroy(entity);
+    }
+
     void Scene::onUpdate(TimeStep dt)
     {
+        //update scripts
+        {
+            m_registry.view<NativeScriptComponent>().each([=](auto entity, auto& nsc)
+            {
+                if (!nsc.Instance)
+                {
+                    nsc.Instance = nsc.InstantiateScript();
+                    nsc.Instance->m_entity = Entity{ entity, this };
+                    nsc.Instance->onCreate();
+                }
+
+                    nsc.Instance->onUpdate(dt);
+            });
+        }
+
+        //render
         Camera* mainCamera = nullptr;
         glm::mat4 cameraTransform;
         {
@@ -88,8 +89,9 @@ namespace Mana {
 
     void Scene::onViewportResize(uint32_t width, uint32_t height)
     {
+
         m_viewportWidth = width;
-        m_viewportWidth = height;
+        m_viewportHeight = height;
 
         //resize non-fixed aspect ratio cameras
         auto view = m_registry.view<CameraComponent>();
@@ -101,6 +103,42 @@ namespace Mana {
                cameraComponent.Camera.setViewportSize(width, height);
            }
         }
+
+    }
+
+    template<typename T>
+    void Scene::onComponentAdded(Entity entity, T& component)
+    {
+        static_assert(false);
+    }
+
+    template<>
+    void Scene::onComponentAdded<TagComponent>(Entity entity, TagComponent& component)
+    {
+
+    }
+
+    template<>
+    void Scene::onComponentAdded<TransformComponent>(Entity entity, TransformComponent& component)
+    {
+
+    }
+
+    template<>
+    void Scene::onComponentAdded<CameraComponent>(Entity entity, CameraComponent& component)
+    {
+        component.Camera.setViewportSize(m_viewportWidth, m_viewportHeight);
+    }
+
+    template<>
+    void Scene::onComponentAdded<NativeScriptComponent>(Entity entity, NativeScriptComponent& component)
+    {
+
+    }
+
+    template<>
+    void Scene::onComponentAdded<SpriteRendererComponent>(Entity entity, SpriteRendererComponent& component)
+    {
 
     }
 

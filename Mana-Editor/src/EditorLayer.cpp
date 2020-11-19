@@ -24,19 +24,62 @@ namespace Mana {
 
         m_activeScene = CreateRef<Scene>();
 
-        auto square = m_activeScene->createEntity("Square");
+        auto square = m_activeScene->createEntity("Purple Square");
         square.addComponent<SpriteRendererComponent>(m_Color);
+
+        auto redSquare = m_activeScene->createEntity("Red Square");
+        redSquare.addComponent<SpriteRendererComponent>(glm::vec4(0.8f, 0.1f, 0.3f, 1.0f));
+
+        auto thirdSquare = m_activeScene->createEntity("Third Square");
+        thirdSquare.addComponent<SpriteRendererComponent>(glm::vec4(0.4f, 0.6f, 0.3f, 1.0f));
 
         m_squareEntity = square;
 
-        m_cameraEntity = m_activeScene->createEntity("Camera Entity");
+        m_cameraEntity = m_activeScene->createEntity("Camera A");
         m_cameraEntity.addComponent<CameraComponent>();
 
-        m_SecondCamera = m_activeScene->createEntity("Camera Entity");
+        m_SecondCamera = m_activeScene->createEntity("Camera B");
         auto& cc = m_SecondCamera.addComponent<CameraComponent>();
         cc.Primary = false;
 
+        
 
+        class CameraController : public ScriptableEntity
+        {
+        public:
+            void onCreate()
+            {
+
+            }
+
+            void onDestroy()
+            {
+
+            }
+
+            void onUpdate(TimeStep dt)
+            {
+                //std::cout << dt << std::endl;
+
+                auto& translation = getComponent<TransformComponent>().Translation;
+                float speed = 5.0f;
+
+                if (Input::isKeyPressed(MA_KEY_A))
+                    translation.x -= speed * dt;
+                if (Input::isKeyPressed(MA_KEY_D))
+                    translation.x += speed * dt;
+                if (Input::isKeyPressed(MA_KEY_W))
+                    translation.y += speed * dt;
+                if (Input::isKeyPressed(MA_KEY_S))
+                    translation.y -= speed * dt;
+            }
+
+        };
+
+        m_cameraEntity.addComponent<NativeScriptComponent>().bind<CameraController>();
+        m_SecondCamera.addComponent<NativeScriptComponent>().bind<CameraController>();
+
+        m_hierarchyPanel.setContext(m_activeScene);
     }
 
     void EditorLayer::onDetach()
@@ -46,8 +89,7 @@ namespace Mana {
 
     void EditorLayer::onUpdate(TimeStep dt)
     {
-        //MA_CORE_INFO("Viewport X: {0}, Y: {1}", m_viewportSize.x, m_viewportSize.y);
-        
+
         if (FramebufferSpecs spec = m_framebuffer->getSpecification();
             m_viewportSize.x > 0.0f && m_viewportSize.y > 0.0f &&
             (spec.width != m_viewportSize.x || spec.height != m_viewportSize.y))
@@ -76,6 +118,7 @@ namespace Mana {
 
     void EditorLayer::onImGuiRender()
     {
+
         // Note: Switch this to true to enable dockspace
         static bool dockspaceOpen = true;
         static bool opt_fullscreen_persistant = true;
@@ -142,6 +185,8 @@ namespace Mana {
         }
 
 
+        m_hierarchyPanel.onImGuiRender();
+
         ImGui::Begin("Stats");
 
         auto stats = Renderer2D::getStats();
@@ -151,32 +196,6 @@ namespace Mana {
         ImGui::Text("Vertices: %d", stats.getTotalVertexCount());
         ImGui::Text("Indices: %d", stats.getTotalIndexCount());
 
-        if(m_squareEntity)
-        {
-            ImGui::Separator();
-            auto& tag = m_squareEntity.getComponent<TagComponent>().Tag;
-            ImGui::Text("%s", tag.c_str());
-
-            auto& squareColor = m_squareEntity.getComponent<SpriteRendererComponent>().Color;
-            ImGui::ColorEdit4("Square Color", glm::value_ptr(squareColor));
-        }
-
-        ImGui::DragFloat3("Camera Transform", 
-            glm::value_ptr(m_cameraEntity.getComponent<TransformComponent>().getTransform()[3]));
-
-        if(ImGui::Checkbox("Camera A", &m_primaryCamera))
-        {
-            m_cameraEntity.getComponent<CameraComponent>().Primary = m_primaryCamera;
-            m_SecondCamera.getComponent<CameraComponent>().Primary = !m_primaryCamera;
-        }
-
-        
-        auto& camera = m_SecondCamera.getComponent<CameraComponent>().Camera;
-        float orthosize = camera.getOrthographicSize();
-
-        if (ImGui::DragFloat("Second Camera Ortho size", &orthosize))
-            camera.setOrthographicSize(orthosize);
-       
         ImGui::End();
 
         ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });

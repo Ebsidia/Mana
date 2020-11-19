@@ -98,14 +98,14 @@ void Sandbox2D::onUpdate(Mana::TimeStep dt)
 
     Mana::Renderer2D::endScene();
 
-#if 1
+#if 0
     if (Mana::Input::isMouseButtonPressed(MA_MOUSE_BUTTON_LEFT))
     {
-        auto [x, y] = Mana::Input::getMousPos();
+        auto [x, y] = Mana::Input::getMousePos();
         auto width = Mana::Application::get().getWindow().getWidth();
         auto height = Mana::Application::get().getWindow().getHeight();
 
-        auto bounds = m_cameraController.getBounds();
+        //auto bounds = m_cameraController.getBounds();
         auto pos = m_cameraController.getCamera().getPosition();
         x = (x / width) * bounds.GetWidth() - bounds.GetWidth() * 0.5f;
         y = bounds.GetHeight() * 0.5f - (y / height) * bounds.GetHeight();
