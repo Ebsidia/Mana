@@ -11,3 +11,6 @@
 	path = Mana/vendor/ImGui
 	url = https://github.com/Ebsidia/imgui
 	branch = docking
+[submodule "Mana/vendor/yaml-cpp"]
+	path = Mana/vendor/yaml-cpp
+	url = https://github.com/Ebsidia/yaml-cpp

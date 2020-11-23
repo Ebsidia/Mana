@@ -16,6 +16,13 @@ namespace Mana {
         virtual void onImGuiRender() override;
         void onEvent(Mana::Event& event) override;
     private:
+        bool onKeyPressed(KeyPressedEvent& event);
+
+        void newScene();
+        void saveSceneAs();
+        void openScene();
+
+    private:
         OrthographicCameraController m_cameraController;
 
         Ref<VertexArray> m_squareVA;

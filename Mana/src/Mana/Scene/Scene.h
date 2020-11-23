@@ -28,6 +28,7 @@ namespace Mana {
         uint32_t m_viewportHeight = 0;
 
         friend class Entity;
+        friend class SceneSerialization;
         friend class SceneHierarchyPanel;
     };
 }

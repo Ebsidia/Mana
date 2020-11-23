@@ -21,6 +21,8 @@ namespace Mana {
 
     void SceneHierarchyPanel::onImGuiRender()
     {
+        //ImGui::ShowDemoWindow();
+
         ImGui::Begin("Scene Hierarchy");
 
         m_context->m_registry.each([&](auto entityID)
@@ -329,7 +331,7 @@ namespace Mana {
                     camera.setOrthographicFarClip(orthoFar);
                 }
 
-                ImGui::Checkbox("Fixed Aspect Ratio", &component.fixedApesctRatio);
+                ImGui::Checkbox("Fixed Aspect Ratio", &component.FixedAspectRatio);
             }
         });
 

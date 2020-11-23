@@ -6,6 +6,9 @@
 #include "glm/gtc/type_ptr.hpp"
 #include "imgui/imgui.h"
 
+#include "Mana/Scene/SceneSerialization.h"
+#include "Mana/Utilities/PlatformUtilities.h"
+
 namespace Mana {
 
     EditorLayer::EditorLayer()
@@ -15,6 +18,7 @@ namespace Mana {
 
     void EditorLayer::onAttach()
     {
+
         //m_checkerBoard = Texture2D::Create("assets/textures/Checkerboard.png");
 
         FramebufferSpecs frameSpec;
@@ -24,6 +28,7 @@ namespace Mana {
 
         m_activeScene = CreateRef<Scene>();
 
+#if 0
         auto square = m_activeScene->createEntity("Purple Square");
         square.addComponent<SpriteRendererComponent>(m_Color);
 
@@ -41,8 +46,6 @@ namespace Mana {
         m_SecondCamera = m_activeScene->createEntity("Camera B");
         auto& cc = m_SecondCamera.addComponent<CameraComponent>();
         cc.Primary = false;
-
-        
 
         class CameraController : public ScriptableEntity
         {
@@ -79,7 +82,9 @@ namespace Mana {
         m_cameraEntity.addComponent<NativeScriptComponent>().bind<CameraController>();
         m_SecondCamera.addComponent<NativeScriptComponent>().bind<CameraController>();
 
+#endif
         m_hierarchyPanel.setContext(m_activeScene);
+
     }
 
     void EditorLayer::onDetach()
@@ -177,7 +182,24 @@ namespace Mana {
                 // which we can't undo at the moment without finer window depth/z control.
                 //ImGui::MenuItem("Fullscreen", NULL, &opt_fullscreen_persistant);1
              
-                if (ImGui::MenuItem("Exit")) Mana::Application::get().close();
+                if (ImGui::MenuItem("New", "ctrl+N"))
+                {
+                    newScene();
+                }
+
+                if (ImGui::MenuItem("Open...", "ctrl+O"))
+                {
+                    openScene();
+                }
+
+                if (ImGui::MenuItem("Save As...", "ctrl+shift+S"))
+                {
+                    saveSceneAs();
+                }
+
+                if (ImGui::MenuItem("Exit")) 
+                    Mana::Application::get().close();
+
                 ImGui::EndMenu();
             }
 
@@ -219,5 +241,74 @@ namespace Mana {
     void EditorLayer::onEvent(Event& event)
     {
         m_cameraController.onEvent(event);
+
+        EventDispatcher dispatcher(event);
+        dispatcher.Dispatch<KeyPressedEvent>(MA_BIND_EVENT_FN(EditorLayer::onKeyPressed));
     }
+
+    bool EditorLayer::onKeyPressed(KeyPressedEvent& event)
+    {
+        if (event.getRepeatCount() > 0)
+            return false;
+
+        bool ctrlPressed = Input::isKeyPressed(MA_KEY_LEFT_CONTROL) || Input::isKeyPressed(MA_KEY_LEFT_CONTROL);
+        bool shiftPressed = Input::isKeyPressed(MA_KEY_LEFT_CONTROL) || Input::isKeyPressed(MA_KEY_LEFT_CONTROL);
+        switch (event.getKeyCode())
+        {
+        case MA_KEY_N:
+        {
+            if (ctrlPressed)
+                newScene();
+
+        }
+        break;
+        case MA_KEY_O:
+        {
+            if (ctrlPressed)
+                openScene();
+        }
+        break;
+        case MA_KEY_S:
+        {
+            if (ctrlPressed && shiftPressed)
+                saveSceneAs();
+
+        }
+        default:
+            break;
+        }
+    }
+
+    void EditorLayer::newScene()
+    {
+        m_activeScene = CreateRef<Scene>();
+        m_activeScene->onViewportResize((uint32_t)m_viewportSize.x, m_viewportSize.y);
+        m_hierarchyPanel.setContext(m_activeScene);
+    }
+
+    void EditorLayer::openScene()
+    {
+        std::string filePath = FileDialogs::openFile("Mana Scene (*.mana)\0*.mana\0");
+        if (!filePath.empty())
+        {
+            m_activeScene = CreateRef<Scene>();
+            m_activeScene->onViewportResize((uint32_t)m_viewportSize.x, m_viewportSize.y);
+            m_hierarchyPanel.setContext(m_activeScene);
+
+            SceneSerialization serializer(m_activeScene);
+            serializer.deserialize(filePath);
+        }
+    }
+
+    void EditorLayer::saveSceneAs()
+    {
+        std::string filePath = FileDialogs::saveFile("Mana Scene (*.mana)\0*.mana\0");
+
+        if (!filePath.empty())
+        {
+            SceneSerialization serializer(m_activeScene);
+            serializer.serialize(filePath);
+        }
+    }
+
 }

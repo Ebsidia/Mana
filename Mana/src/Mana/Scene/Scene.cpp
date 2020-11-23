@@ -98,7 +98,7 @@ namespace Mana {
         for (auto entity : view)
         {
            auto& cameraComponent = view.get<CameraComponent>(entity);
-           if (!cameraComponent.fixedApesctRatio)
+           if (!cameraComponent.FixedAspectRatio)
            {
                cameraComponent.Camera.setViewportSize(width, height);
            }

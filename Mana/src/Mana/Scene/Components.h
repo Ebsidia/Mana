@@ -57,7 +57,7 @@ namespace Mana {
     {
         SceneCamera Camera;
         bool Primary = true;
-        bool fixedApesctRatio = false;
+        bool FixedAspectRatio = false;
 
         CameraComponent() = default;
         CameraComponent(const CameraComponent&) = default;
