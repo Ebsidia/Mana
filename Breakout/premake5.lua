@@ -20,11 +20,19 @@ project "Breakout"
         "%{wks.location}/Mana/vendor",
         "%{IncludeDir.glm}",
         "%{IncludeDir.entt}",
+        "%{IncludeDir.irrKlang}"
+
+    }
+
+    libdirs
+    {
+        "%{wks.location}/Breakout/vendor/irrKlang/lib/Winx64-visualStudio"
     }
 
     links
     {
         "Mana",
+        "irrKlang"
     }
 
     filter "system:windows"

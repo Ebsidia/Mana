@@ -10,4 +10,6 @@
 [submodule "Mana/vendor/yaml-cpp"]
 	path = Mana/vendor/yaml-cpp
 	url = https://github.com/Ebsidia/yaml-cpp
-
+[submodule "Mana/vendor/imgui"]
+	path = Mana/vendor/imgui
+	url = https://github.com/Ebsidia/imgui
