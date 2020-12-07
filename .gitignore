@@ -1,6 +1,7 @@
 # Binaries
 **/bin/
 !vendor/premake/bin/
+!Breakout/vendor/irrKlang/bin
 bin-int/
 
 # Visual Studio files and folder
