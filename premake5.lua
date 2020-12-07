@@ -45,4 +45,5 @@ group ""
 include "Mana"
 include "Sandbox"
 include "Mana-Editor"
+include "Breakout"
 

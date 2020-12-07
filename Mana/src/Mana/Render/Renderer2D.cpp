@@ -296,6 +296,9 @@ namespace Mana {
 
         if (textureIndex == 0.0f)
         {
+            if (s_renderData.textureSlotIndex >= renderer2DData::maxTextureSlots)
+                nextBatch();
+
             textureIndex = (float)s_renderData.textureSlotIndex;
             s_renderData.textureSlots[s_renderData.textureSlotIndex] = texture;
             s_renderData.textureSlotIndex++;
