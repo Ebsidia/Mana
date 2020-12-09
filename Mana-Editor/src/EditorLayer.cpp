@@ -110,10 +110,10 @@ namespace Mana {
 
         Renderer2D::resetStats();
         m_framebuffer->bind();
+
         RenderCommand::setClearColor({ 0.15f, 0.15f, 0.15f, 1 });
         RenderCommand::clear();
         
-
         //update the scene
         m_activeScene->onUpdate(dt);
 

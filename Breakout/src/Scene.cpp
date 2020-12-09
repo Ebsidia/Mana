@@ -23,7 +23,7 @@ void Scene::init()
     m_ball.setVelocity(INITIAL_BALL_VELOCITY);
 
     Level levelOne;
-    levelOne.loadLevel("assets/Breakout/LevelData/level-one.txt", 1600, 900 * 0.5);
+    levelOne.loadLevel("assets/Breakout/LevelData/level-two.txt", 1600, 900 * 0.5);
 
     m_levels.push_back(levelOne);
     m_currentLevel = 0;
