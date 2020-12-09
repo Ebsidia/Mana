@@ -1,6 +1,6 @@
 # Binaries
-!bin/
 **/bin/
+!bin/
 !vendor/premake/bin/
 !Breakout/vendor/irrKlang/bin
 bin-int/
